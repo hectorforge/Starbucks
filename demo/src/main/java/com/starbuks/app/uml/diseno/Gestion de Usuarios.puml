@@ -1,0 +1,23 @@
+@startuml
+	package emp-cafeteria-uml{
+		class Usuario{
+			- idUsuario
+			- nombres
+			- apellidos
+			- email
+			- telefono
+			- username
+			- password
+			-- Method--
+		}
+		interface UsuarioUseCase{
+			--Methods--
+			+ buscarPorNombre()
+			+ buscarPorTelefonoJPQL()
+			+ findByEmail()		
+		}
+		
+		Usuario --> UsuarioUseCase: Implementa
+	}
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+	package emp-cafeteria-uml{
+		class Rol{
+			- idRol
+			- nombre
+			- descripcion
+			-- Method--
+		}
+		interface RolUseCase{
+			--Methods--
+			+ buscarPorNombre()
+			+ buscarPorDescripcionJPQL()		
+		}
+		
+		Rol --> RolUseCase: Implementa
+	}
+
+@enduml
