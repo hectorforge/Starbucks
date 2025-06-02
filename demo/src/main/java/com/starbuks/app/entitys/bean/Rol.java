@@ -1,5 +1,7 @@
 package com.starbuks.app.entitys.bean;
 
+import com.starbuks.app.entitys.enums.ERolList;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +19,8 @@ public class Rol {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nombre", unique = true, nullable = false)
-    private String nombre;
+    @Column(nullable = false)
+    private ERolList nombre;
 
     @Column(name = "descripcion")
     private String descripcion;
