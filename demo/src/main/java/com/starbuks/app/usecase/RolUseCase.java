@@ -1,19 +1,21 @@
-package com.starbuks.app.usecase;
+package emp.cafeteria.usecase;
 
-import com.starbuks.app.entitys.bean.Rol;
 import java.util.List;
 
+import emp.cafeteria.entity.bean.Rol;
+import org.springframework.stereotype.Component;
+
+@Component
 public interface RolUseCase {
 
-    // CRUD
-    List<Rol> listar();
-    Rol obtenerPorId(Long id);
-    Rol registrar(Rol rol);
-    Rol actualizar(Rol rol);
-    void eliminar(Long id);
-
-    // ADDS
-    Rol obtenerPorNombre(String nombreRol);
-    boolean esRolAdmin(Long rolId);
-    long contarUsuariosPorRol(Long rolId);
+	
+	public List<Rol> findByDescripcion(String descripcion);
+	
+	public List<Rol> ListarRoles();
+	
+	public Integer ActualizarRol(String descripcion, Integer idRol);
 }
+
+
+
+

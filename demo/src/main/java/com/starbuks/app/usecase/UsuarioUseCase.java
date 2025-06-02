@@ -1,19 +1,20 @@
-package com.starbuks.app.usecase;
+package emp.cafeteria.usecase;
 
-import com.starbuks.app.entitys.bean.Usuario;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import emp.cafeteria.entity.bean.Usuario;
+
+@Component
 public interface UsuarioUseCase {
+	
+    List<Usuario> listarUsuarios();
 
-    // CRUD
-    List<Usuario> listar();
-    Usuario obtenerPorId(Long id);
-    Usuario registrar(Usuario usuario);
-    Usuario actualizar(Usuario usuario);
-    void eliminar(Long id);
+    List<Usuario> findByEmail(String email);
 
-    // ADDS
-    Usuario buscarPorUsername(String username);
-    List<Usuario> listarPorRol(String nombreRol);
-    void actualizarPassword(Long usuarioId, String nuevaPassword);
+    List<Usuario> getById(String id);
+
+    List<Usuario> findByNombreStartingWith(String nombre);
+
+    Integer actualizarUsuario(String nombre, Integer idUsuario);
 }

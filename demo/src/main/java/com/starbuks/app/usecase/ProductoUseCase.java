@@ -1,21 +1,31 @@
 package com.starbuks.app.usecase;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import com.starbuks.app.entitys.bean.Categoria;
 import com.starbuks.app.entitys.bean.Producto;
 
 public interface ProductoUseCase {
-    
-    // CRUD
-    List<Producto> listar();
-    Producto obtenerPorId(Long id);
-    Producto registrar(Producto producto);
-    Producto actualizar(Producto producto);
-    void eliminar(Long id);
 
-    // ADDS
-    List<Producto> buscarPorRangoPrecio(Double precioMin, Double precioMax);
-    List<Producto> buscarPorUnidadMedida(String unidadMedida);
-    List<Producto> listarPorCategoria(Long categoriaId);
+    
+	public List<Producto> findAll();
+
+    public List<Producto> findByActivoTrue();
+
+    public Optional<Producto> findByIdAndActivoTrue(Long id);
+
+    public List<Producto> findByNombreContainingIgnoreCase(String nombre);
+
+    public List<Producto> findByPrecioBetween(BigDecimal min, BigDecimal max);
+
+    public List<Producto> findByStockGreaterThanEqual(int cantidad);
+
+    public Optional<Producto> findById(Long id);
+    public Producto save(Producto producto);
+    public Producto update(Long id, Producto producto);
+
+    
+    public void deleteById(Long id);
+
 }

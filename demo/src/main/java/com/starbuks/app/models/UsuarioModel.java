@@ -1,60 +1,42 @@
-package com.starbuks.app.models;
-
-import com.starbuks.app.entitys.bean.Usuario;
-import com.starbuks.app.persistence.UsuarioRepository;
-import com.starbuks.app.usecase.UsuarioUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+package emp.cafeteria.model;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import emp.cafeteria.entity.bean.Usuario;
+import emp.cafeteria.persistence.UsuarioRepository;
+import emp.cafeteria.usecase.UsuarioUseCase;
+
 @Service
-@RequiredArgsConstructor
 public class UsuarioModel implements UsuarioUseCase {
+	 
+		@Autowired
+	    private UsuarioRepository usuarioRepository;
 
-    private final UsuarioRepository _usuarioRepository;
+	    @Override
+	    public List<Usuario> listarUsuarios() {
+	        return usuarioRepository.findAll(); 
+	    }
 
-    @Override
-    public List<Usuario> listar() {
-        return _usuarioRepository.findAll();
-    }
+	    @Override
+	    public List<Usuario> findByEmail(String email) {
+	        return usuarioRepository.findByEmail(email);
+	    }
 
-    @Override
-    public Usuario obtenerPorId(Long id) {
-        return _usuarioRepository.findById(id).orElse(null);
-    }
+	    @Override
+	    public List<Usuario> getById(String id) {
+	        return usuarioRepository.getById(id);
+	    }
 
-    @Override
-    public Usuario registrar(Usuario usuario) {
-        return _usuarioRepository.save(usuario);
-    }
+	    @Override
+	    public List<Usuario> findByNombreStartingWith(String nombre) {
+	        return usuarioRepository.findByNombreStartingWith(nombre);
+	    }
 
-    @Override
-    public Usuario actualizar(Usuario usuario) {
-        return _usuarioRepository.save(usuario);
-    }
-
-    @Override
-    public void eliminar(Long id) {
-        _usuarioRepository.deleteById(id);
-    }
-
-    @Override
-    public Usuario buscarPorUsername(String username) {
-        return _usuarioRepository.findByUsername(username).orElse(null);
-    }
-
-    @Override
-    public List<Usuario> listarPorRol(String nombreRol) {
-        return _usuarioRepository.findByRol_Nombre(nombreRol);
-    }
-
-    @Override
-    public void actualizarPassword(Long usuarioId, String nuevaPassword) {
-        Usuario usuario = obtenerPorId(usuarioId);
-        if (usuario != null) {
-            usuario.setPassword(nuevaPassword);
-            _usuarioRepository.save(usuario);
-        }
-    }
+	    @Override
+	    public Integer actualizarUsuario(String nombre, Integer idUsuario) {
+	        return 1;
+	    }
 }

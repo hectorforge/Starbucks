@@ -1,58 +1,61 @@
-package com.starbuks.app.controller;
-
-import com.starbuks.app.entitys.bean.Usuario;
-import com.starbuks.app.usecase.UsuarioUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+package emp.cafeteria.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import emp.cafeteria.entity.bean.Usuario;
+import emp.cafeteria.usecase.UsuarioUseCase;
+
 @RestController
-@RequestMapping("/api/usuario")
-@RequiredArgsConstructor
+@RequestMapping({"/","/usuarios","/home"})
 public class UsuarioController {
+	
+	@Autowired
+	private UsuarioUseCase usuarioUseCase;
+	
+	@GetMapping("/acceso")
+	public String acceso() {
+		return "Bienvenido al software de gestion de venta";
+	}
+	
+	 @GetMapping("/listar")
+	    public List<Usuario> listarUsuarios() {
+	        return usuarioUseCase.listarUsuarios();
+	    }
 
-    private final UsuarioUseCase usuarioServicio;
+	    @PutMapping("/actualizar/{nombre}/{idUsuario}")
+	    public Integer actualizarUsuario(@PathVariable String nombre, @PathVariable Integer idUsuario) {
+	        return usuarioUseCase.actualizarUsuario(nombre, idUsuario);
+	    }
 
-    // CRUD
-    @GetMapping
-    public List<Usuario> listar() {
-        return usuarioServicio.listar();
-    }
+	    @PutMapping("/actualizarMensaje/{descripcion}/{idUsuario}")
+	    public ResponseEntity<String> actualizarUsuarioMensaje(@PathVariable String descripcion, @PathVariable Integer idUsuario) {
+	        Integer resultado = usuarioUseCase.actualizarUsuario(descripcion, idUsuario);
+	        if (resultado > 0) {
+	            return ResponseEntity.ok("El usuario se registró con éxito.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe: " + idUsuario);
+	        }
+	    }
 
-    @GetMapping("/{id}")
-    public Usuario obtenerPorId(@PathVariable Long id) {
-        return usuarioServicio.obtenerPorId(id);
-    }
+	    @GetMapping("/buscar/email")
+	    public List<Usuario> findByEmail(@RequestParam String email) {
+	        return usuarioUseCase.findByEmail(email);
+	    }
 
-    @PostMapping
-    public Usuario registrar(@RequestBody Usuario usuario) {
-        return usuarioServicio.registrar(usuario);
-    }
-
-    @PutMapping
-    public Usuario actualizar(@RequestBody Usuario usuario) {
-        return usuarioServicio.actualizar(usuario);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        usuarioServicio.eliminar(id);
-    }
-
-    // ADDS
-    @GetMapping("/username")
-    public Usuario buscarPorUsername(@RequestParam String username) {
-        return usuarioServicio.buscarPorUsername(username);
-    }
-
-    @GetMapping("/rol")
-    public List<Usuario> listarPorRol(@RequestParam String rol) {
-        return usuarioServicio.listarPorRol(rol);
-    }
-
-    @PutMapping("/{id}/password")
-    public void actualizarPassword(@PathVariable Long id, @RequestParam String nuevaPassword) {
-        usuarioServicio.actualizarPassword(id, nuevaPassword);
-    }
+	    @GetMapping("/buscar/nombre")
+	    public List<Usuario> findByNombreStartingWith(@RequestParam String nombre) {
+	        return usuarioUseCase.findByNombreStartingWith(nombre);
+	    }
 }
+
+

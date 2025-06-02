@@ -1,58 +1,52 @@
-package com.starbuks.app.controller;
-
-import com.starbuks.app.entitys.bean.Rol;
-import com.starbuks.app.usecase.RolUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+package emp.cafeteria.controller;
 
 import java.util.List;
 
+import emp.cafeteria.entity.bean.Rol;
+
+import emp.cafeteria.usecase.RolUseCase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
-@RequestMapping("/api/rol")
-@RequiredArgsConstructor
+@RequestMapping({"/","/cafeteria","/home"})
 public class RolController {
+	 
+	@Autowired
+	private RolUseCase rolUseCase;
+	
+	@GetMapping("/acceso")
+	public String acceso() {
+		return "Bienvenido al software de gestion de venta";
+	}
+	
+	@GetMapping("/listar")
+	public List<Rol> ListarRoles(){
+		return rolUseCase.ListarRoles();
+	}
+	
+	@PutMapping("/actualizar/{descripcion}/{idRol}")
+	public Integer ActualizarRol(@PathVariable String descripcion, @PathVariable Integer idRol) {
+		return rolUseCase.ActualizarRol(descripcion, idRol);
+	}
+	
+	@PutMapping("/actualizarMensaje/{descripcion}/{idRol}")
+	public ResponseEntity<String> ActualizarRolMensaje(@PathVariable String descripcion, @PathVariable Integer idRol){
+		
+		Integer Rol = rolUseCase.ActualizarRol(descripcion, idRol);
+		
+		if(Rol>0) {
+			return ResponseEntity.ok("el rol del trabajador se registo con exito ..!");
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe: "+ idRol);
+		}
+	}
 
-    private final RolUseCase rolServicio;
-
-    // CRUD
-    @GetMapping
-    public List<Rol> listar() {
-        return rolServicio.listar();
-    }
-
-    @GetMapping("/{id}")
-    public Rol obtenerPorId(@PathVariable Long id) {
-        return rolServicio.obtenerPorId(id);
-    }
-
-    @PostMapping
-    public Rol registrar(@RequestBody Rol rol) {
-        return rolServicio.registrar(rol);
-    }
-
-    @PutMapping
-    public Rol actualizar(@RequestBody Rol rol) {
-        return rolServicio.actualizar(rol);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        rolServicio.eliminar(id);
-    }
-
-    // ADDS
-    @GetMapping("/nombre")
-    public Rol obtenerPorNombre(@RequestParam String nombre) {
-        return rolServicio.obtenerPorNombre(nombre);
-    }
-
-    @GetMapping("/{id}/admin")
-    public boolean esRolAdmin(@PathVariable Long id) {
-        return rolServicio.esRolAdmin(id);
-    }
-
-    @GetMapping("/{id}/usuarios/count")
-    public long contarUsuariosPorRol(@PathVariable Long id) {
-        return rolServicio.contarUsuariosPorRol(id);
-    }
 }

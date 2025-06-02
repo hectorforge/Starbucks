@@ -1,60 +1,74 @@
 package com.starbuks.app.controller;
 
-import com.starbuks.app.entitys.bean.Producto;
-import com.starbuks.app.usecase.ProductoUseCase;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.usecase.ProductoUseCase;
 
 @RestController
-@RequestMapping("/api/producto")
-@RequiredArgsConstructor
+@RequestMapping("/api/productos")
 public class ProductoController {
 
-    private final ProductoUseCase productoServicio;
+    @Autowired
+    private ProductoUseCase productoUseCase;
 
-    // CRUD
+
     @GetMapping
-    public List<Producto> listar() {
-        return productoServicio.listar();
+    public List<Producto> listarTodos() {
+        return productoUseCase.findAll();
     }
+
+
+    @GetMapping("/activos")
+    public List<Producto> listarActivos() {
+        return productoUseCase.findByActivoTrue();
+    }
+
 
     @GetMapping("/{id}")
-    public Producto obtenerPorId(@PathVariable Long id) {
-        return productoServicio.obtenerPorId(id);
+    public Optional<Producto> obtenerPorIdActivo(@PathVariable Long id) {
+        return productoUseCase.findByIdAndActivoTrue(id);
     }
 
-    @PostMapping
-    public Producto registrar(@RequestBody Producto producto) {
-        return productoServicio.registrar(producto);
+
+    @GetMapping("/buscar/nombre")
+    public List<Producto> buscarPorNombre(@RequestParam String nombre) {
+        return productoUseCase.findByNombreContainingIgnoreCase(nombre);
     }
 
-    @PutMapping
-    public Producto actualizar(@RequestBody Producto producto) {
-        return productoServicio.actualizar(producto);
+
+    @GetMapping("/buscar/precio")
+    public List<Producto> buscarPorPrecio(
+            @RequestParam BigDecimal min,
+            @RequestParam BigDecimal max
+    ) {
+        return productoUseCase.findByPrecioBetween(min, max);
+    }
+ //
+    @GetMapping("/buscar/stock")
+    public List<Producto> buscarPorStockMinimo(@RequestParam int cantidad) {
+        return productoUseCase.findByStockGreaterThanEqual(cantidad);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        productoServicio.eliminar(id);
+    public void eliminarProducto(@PathVariable Long id) {
+        productoUseCase.deleteById(id);
+    }
+    @PostMapping
+    public Producto crearProducto(@RequestBody Producto producto) {
+        return productoUseCase.save(producto);
     }
 
-    // ADDS
-    @GetMapping("/precio")
-    public List<Producto> buscarPorRangoPrecio(
-            @RequestParam Double min,
-            @RequestParam Double max) {
-        return productoServicio.buscarPorRangoPrecio(min, max);
-    }
-
-    @GetMapping("/unidad-medida")
-    public List<Producto> buscarPorUnidadMedida(@RequestParam String unidad) {
-        return productoServicio.buscarPorUnidadMedida(unidad);
-    }
-
-    @GetMapping("/categoria/{categoriaId}")
-    public List<Producto> listarPorCategoria(@PathVariable Long categoriaId) {
-        return productoServicio.listarPorCategoria(categoriaId);
+    @PutMapping("/{id}")
+    public Producto actualizarProducto(
+        @PathVariable Long id,
+        @RequestBody Producto producto
+    ) {
+        return productoUseCase.update(id, producto);
     }
 }
