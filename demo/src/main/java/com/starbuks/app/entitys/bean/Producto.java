@@ -6,12 +6,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.starbuks.app.entitys.enums.EUnidadMedida;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -59,15 +55,14 @@ public class Producto {
     private String imagenUrl;
     
     @Column(name = "unidad_medida")
-    @Enumerated(EnumType.STRING)
-    private EUnidadMedida unidad_medida;
+    private String unidadMedida;
     
     @Column(name = "peso")
     private Double peso;
     
     @UpdateTimestamp
     @Column(name = "fecha_actualizacion")
-    private LocalDateTime fecha_actualizacion;
+    private LocalDateTime fechaActualizacion;
     
     @ManyToOne
     @JoinColumn(name = "categoria_id")
