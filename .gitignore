@@ -1,0 +1,27 @@
+# Archivos y carpetas de Eclipse
+.metadata/
+*.classpath
+*.project
+*.settings/
+
+# Archivos compilados
+/bin/
+/target/
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Maven
+/logs
+*.iml
+
+# IntelliJ
+.idea/
+*.iml
+
+# Otros
+*.swp
