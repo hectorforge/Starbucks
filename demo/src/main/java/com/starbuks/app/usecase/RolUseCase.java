@@ -1,8 +1,8 @@
-package com.startbucks.usecase;
+package com.starbuks.app.usecase;
 
 import java.util.List;
 
-import com.startbucks.entitys.bean.Rol;
+import com.starbuks.app.entitys.bean.Rol;
 import org.springframework.stereotype.Component;
 
 @Component

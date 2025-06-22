@@ -1,4 +1,4 @@
-package com.startbucks.models;
+package com.starbuks.app.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -8,9 +8,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.startbucks.entitys.bean.Producto;
-import com.startbucks.persistence.ProductoRepository;
-import com.startbucks.usecase.ProductoUseCase;
+import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.persistence.ProductoRepository;
+import com.starbuks.app.usecase.ProductoUseCase;
 
 @Service
 public class ProductoModel implements ProductoUseCase {

@@ -1,6 +1,6 @@
-package com.startbucks.usecase;
+package com.starbuks.app.usecase;
 
-import com.startbucks.entitys.bean.Categoria;
+import com.starbuks.app.entitys.bean.Categoria;
 import java.util.List;
 
 public interface CategoriaUseCase {

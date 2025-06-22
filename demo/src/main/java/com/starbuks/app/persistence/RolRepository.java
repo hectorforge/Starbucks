@@ -1,8 +1,8 @@
-package com.startbucks.persistence;
+package com.starbuks.app.persistence;
 
 import java.util.List;
 
-import com.startbucks.entitys.bean.Rol;
+import com.starbuks.app.entitys.bean.Rol;
 import jakarta.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
-package com.startbucks.controller;
+package com.starbuks.app.controller;
 
-import com.startbucks.entitys.bean.*;
-import com.startbucks.persistence.*;
+import com.starbuks.app.entitys.bean.*;
+import com.starbuks.app.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

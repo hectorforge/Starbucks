@@ -48,4 +48,4 @@ public class RolController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe: "+ idRol);
 		}
 	}
-}
+} 

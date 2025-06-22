@@ -1,10 +1,10 @@
-package com.startbucks.usecase;
+package com.starbuks.app.usecase;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.startbucks.entitys.bean.Producto;
+import com.starbuks.app.entitys.bean.Producto;
 
 public interface ProductoUseCase {
 

@@ -1,9 +1,9 @@
-package com.startbucks.usecase;
+package com.starbuks.app.usecase;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import com.startbucks.entitys.bean.Usuario;
+import com.starbuks.app.entitys.bean.Usuario;
 
 @Component
 public interface UsuarioUseCase {

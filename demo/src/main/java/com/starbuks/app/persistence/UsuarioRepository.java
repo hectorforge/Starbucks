@@ -1,10 +1,10 @@
-package com.startbucks.persistence;
+package com.starbuks.app.persistence;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.startbucks.entitys.bean.Usuario;
+import com.starbuks.app.entitys.bean.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 

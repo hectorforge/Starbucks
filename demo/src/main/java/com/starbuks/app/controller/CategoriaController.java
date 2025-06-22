@@ -1,7 +1,7 @@
-package com.startbucks.controller;
+package com.starbuks.app.controller;
 
-import com.startbucks.entitys.bean.Categoria;
-import com.startbucks.usecase.CategoriaUseCase;
+import com.starbuks.app.entitys.bean.Categoria;
+import com.starbuks.app.usecase.CategoriaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

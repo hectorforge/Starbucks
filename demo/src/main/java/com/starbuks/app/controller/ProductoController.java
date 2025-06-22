@@ -1,4 +1,4 @@
-package com.startbucks.controller;
+package com.starbuks.app.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.startbucks.entitys.bean.Producto;
-import com.startbucks.usecase.ProductoUseCase;
+import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.usecase.ProductoUseCase;
 
 @RestController
 @RequestMapping("/api/productos")

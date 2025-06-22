@@ -1,9 +1,9 @@
-package com.startbucks.models;
+package com.starbuks.app.models;
 
-import com.startbucks.entitys.bean.Categoria;
-import com.startbucks.persistence.CategoriaRepository;
-import com.startbucks.persistence.ProductoRepository;
-import com.startbucks.usecase.CategoriaUseCase;
+import com.starbuks.app.entitys.bean.Categoria;
+import com.starbuks.app.persistence.CategoriaRepository;
+import com.starbuks.app.persistence.ProductoRepository;
+import com.starbuks.app.usecase.CategoriaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

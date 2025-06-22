@@ -1,4 +1,4 @@
-package com.startbucks.controller;
+package com.starbuks.app.controller;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.startbucks.entitys.bean.Usuario;
-import com.startbucks.usecase.UsuarioUseCase;
+import com.starbuks.app.entitys.bean.Usuario;
+import com.starbuks.app.usecase.UsuarioUseCase;
 
 @RestController
 @RequestMapping({"/","/usuarios","/home"})

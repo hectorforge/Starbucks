@@ -1,6 +1,6 @@
-package com.startbucks.persistence;
+package com.starbuks.app.persistence;
 
-import com.startbucks.entitys.bean.Producto;
+import com.starbuks.app.entitys.bean.Producto;
 
 import java.math.BigDecimal;
 import java.util.List;

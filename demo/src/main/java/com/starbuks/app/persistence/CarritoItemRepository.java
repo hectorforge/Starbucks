@@ -1,6 +1,6 @@
-package com.startbucks.persistence;
+package com.starbuks.app.persistence;
 
-import com.startbucks.entitys.bean.CarritoItem;
+import com.starbuks.app.entitys.bean.CarritoItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
