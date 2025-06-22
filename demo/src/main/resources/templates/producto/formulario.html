@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="${producto.id == null} ? 'Nuevo Producto' : 'Editar Producto'"></title>
+  <title th:text="${productoId == null} ? 'Nuevo Producto' : 'Editar Producto'"></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body class="container mt-4">
 
-<h1 class="mb-4 text-center" th:text="${producto.id == null} ? 'Nuevo Producto' : 'Editar Producto'"></h1>
+<h1 class="mb-4 text-center" th:text="${productoId == null} ? 'Nuevo Producto' : 'Editar Producto'"></h1>
 
-<form th:action="@{${producto.id == null} ? '/productos/guardar' : '/productos/actualizar/' + ${producto.id}}"
+<form th:action="@{${productoId == null} ? '/productos/guardar' : '/productos/actualizar/' + ${productoId}}"
       th:object="${producto}" method="post">
-
-  <!-- Campo oculto para el ID (necesario al actualizar) -->
-  <input type="hidden" th:field="*{id}" />
 
   <!-- Nombre -->
   <div class="mb-3">
@@ -62,6 +59,42 @@
     </div>
   </div>
 
+  <!-- Código -->
+  <div class="mb-3">
+    <label for="codigo">Código:</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+      <input type="text" id="codigo" th:field="*{codigo}" class="form-control" placeholder="Código del producto" />
+    </div>
+  </div>
+
+  <!-- Imagen URL -->
+  <div class="mb-3">
+    <label for="imagenUrl">URL de Imagen:</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-image"></i></span>
+      <input type="text" id="imagenUrl" th:field="*{imagenUrl}" class="form-control" placeholder="https://..." />
+    </div>
+  </div>
+
+  <!-- Unidad de Medida -->
+  <div class="mb-3">
+    <label for="unidadMedida">Unidad de Medida:</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-rulers"></i></span>
+      <input type="text" id="unidadMedida" th:field="*{unidadMedida}" class="form-control" placeholder="Ej: ml, gr, unidad..." />
+    </div>
+  </div>
+
+  <!-- Peso -->
+  <div class="mb-3">
+    <label for="peso">Peso:</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-bag"></i></span>
+      <input type="number" step="0.01" id="peso" th:field="*{peso}" class="form-control" placeholder="Peso del producto (kg)" />
+    </div>
+  </div>
+
   <!-- Activo -->
   <div class="form-check mb-3">
     <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo" />
@@ -71,7 +104,7 @@
   <!-- Botones -->
   <button type="submit" class="btn btn-success">
     <i class="bi bi-save"></i>
-    <span th:text="${producto.id == null} ? 'Guardar' : 'Actualizar'"></span>
+    <span th:text="${productoId == null} ? 'Guardar' : 'Actualizar'"></span>
   </button>
   <a th:href="@{/productos}" class="btn btn-secondary">
     <i class="bi bi-arrow-left"></i> Cancelar

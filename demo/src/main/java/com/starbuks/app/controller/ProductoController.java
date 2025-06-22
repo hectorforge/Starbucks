@@ -1,7 +1,8 @@
 package com.starbuks.app.controller;
 
-import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.dtos.ProductoDTO;
 import com.starbuks.app.entitys.bean.Categoria;
+import com.starbuks.app.entitys.bean.Producto;
 import com.starbuks.app.usecase.CategoriaUseCase;
 import com.starbuks.app.usecase.ProductoUseCase;
 
@@ -31,38 +32,76 @@ public class ProductoController {
 	// FORMULARIO PARA CREAR
 	@GetMapping("/nuevo")
 	public String mostrarFormularioNuevo(Model model) {
-		model.addAttribute("producto", new Producto());
+		model.addAttribute("producto", new ProductoDTO());
 		model.addAttribute("categorias", categoriaUseCase.listar());
 		return "producto/formulario";
 	}
 
 	// GUARDAR NUEVO PRODUCTO
 	@PostMapping("/guardar")
-	public String guardarProducto(@ModelAttribute Producto producto) {
+	public String guardarProducto(@ModelAttribute ProductoDTO dto) {
+		Producto producto = convertirDtoAEntidad(dto);
 		productoUseCase.save(producto);
 		return "redirect:/productos";
 	}
 
-	// EDITAR
+	// FORMULARIO PARA EDITAR
 	@GetMapping("/editar/{id}")
 	public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
 		Producto producto = productoUseCase.findById(id).orElseThrow();
-		model.addAttribute("producto", producto);
+
+		ProductoDTO dto = new ProductoDTO();
+		dto.setNombre(producto.getNombre());
+		dto.setDescripcion(producto.getDescripcion());
+		dto.setPrecio(producto.getPrecio());
+		dto.setStock(producto.getStock());
+		dto.setActivo(producto.getActivo());
+		dto.setCodigo(producto.getCodigo());
+		dto.setImagenUrl(producto.getImagenUrl());
+		dto.setUnidadMedida(producto.getUnidadMedida());
+		dto.setPeso(producto.getPeso());
+		if (producto.getCategoriaId() != null)
+			dto.setCategoriaId(producto.getCategoriaId().getId());
+
+		model.addAttribute("productoId", id);
+		model.addAttribute("producto", dto);
 		model.addAttribute("categorias", categoriaUseCase.listar());
 		return "producto/formulario";
 	}
 
-	// ACTUALIZAR
+	// ACTUALIZAR PRODUCTO
 	@PostMapping("/actualizar/{id}")
-	public String actualizarProducto(@PathVariable Long id, @ModelAttribute Producto producto) {
-		productoUseCase.update(id, producto);
+	public String actualizarProducto(@PathVariable Long id, @ModelAttribute ProductoDTO dto) {
+		Producto actualizado = convertirDtoAEntidad(dto);
+		productoUseCase.update(id, actualizado);
 		return "redirect:/productos";
 	}
 
-	// ELIMINAR
+	// ELIMINAR PRODUCTO
 	@GetMapping("/eliminar/{id}")
 	public String eliminarProducto(@PathVariable Long id) {
 		productoUseCase.deleteById(id);
 		return "redirect:/productos";
+	}
+
+	// Convertir DTO a Entidad
+	private Producto convertirDtoAEntidad(ProductoDTO dto) {
+		Producto p = new Producto();
+		p.setNombre(dto.getNombre());
+		p.setDescripcion(dto.getDescripcion());
+		p.setPrecio(dto.getPrecio());
+		p.setStock(dto.getStock());
+		p.setActivo(dto.getActivo());
+		p.setCodigo(dto.getCodigo());
+		p.setImagenUrl(dto.getImagenUrl());
+		p.setUnidadMedida(dto.getUnidadMedida());
+		p.setPeso(dto.getPeso());
+
+		if (dto.getCategoriaId() != null) {
+			Categoria categoria = categoriaUseCase.obtenerPorId(dto.getCategoriaId());
+			p.setCategoriaId(categoria);
+		}
+
+		return p;
 	}
 }

@@ -67,4 +67,23 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoriaId;
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", stock=" + stock +
+                ", precio=" + precio +
+                ", fechaEntrada=" + fechaEntrada +
+                ", activo=" + activo +
+                ", codigo='" + codigo + '\'' +
+                ", imagenUrl='" + imagenUrl + '\'' +
+                ", unidadMedida='" + unidadMedida + '\'' +
+                ", peso=" + peso +
+                ", fechaActualizacion=" + fechaActualizacion +
+                ", categoriaId=" + categoriaId +
+                '}';
+    }
 }
