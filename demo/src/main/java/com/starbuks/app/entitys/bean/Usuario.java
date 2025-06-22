@@ -53,7 +53,6 @@ public class Usuario {
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "role_id",nullable = false)
     private Rol rol;

@@ -1,4 +1,4 @@
-package com.starbuks.app.entitys.dtos;
+package com.starbuks.app.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
