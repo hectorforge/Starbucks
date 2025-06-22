@@ -1,0 +1,48 @@
+<!-- templates/producto/formulario.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${producto.id == null} ? 'Nuevo Producto' : 'Editar Producto'"></title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-4">
+<h1 th:text="${producto.id == null} ? 'Nuevo Producto' : 'Editar Producto'" class="mb-4"></h1>
+
+<form th:action="@{${producto.id == null} ? '/productos/guardar' : '/productos/actualizar/' + ${producto.id}}" th:object="${producto}" method="post">
+  <div class="mb-3">
+    <label>Nombre:</label>
+    <input type="text" th:field="*{nombre}" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label>Descripción:</label>
+    <textarea th:field="*{descripcion}" class="form-control" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label>Precio:</label>
+    <input type="number" th:field="*{precio}" class="form-control" step="0.01" required />
+  </div>
+
+  <div class="mb-3">
+    <label>Stock:</label>
+    <input type="number" th:field="*{stock}" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label>Categoría:</label>
+    <select th:field="*{categoriaId}" class="form-select" required>
+      <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat.nombre}"></option>
+    </select>
+  </div>
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" th:field="*{activo}" />
+    <label class="form-check-label">Activo</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a th:href="@{/productos}" class="btn btn-secondary">Cancelar</a>
+</form>
+</body>
+</html>

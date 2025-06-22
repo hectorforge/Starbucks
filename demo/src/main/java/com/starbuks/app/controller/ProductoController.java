@@ -21,12 +21,12 @@ public class ProductoController {
 	private final CategoriaUseCase categoriaUseCase;
 
 	// LISTAR TODOS LOS PRODUCTOS
-	@GetMapping
+	@GetMapping()
 	public String listarProductos(Model model) {
 		List<Producto> productos = productoUseCase.findAll();
 		model.addAttribute("productos", productos);
 		System.out.println("Paso por el listar");
-		return "listar";
+		return "producto/listar";
 	}
 
 	// FORMULARIO PARA CREAR
