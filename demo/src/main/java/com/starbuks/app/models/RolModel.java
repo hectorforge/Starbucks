@@ -1,4 +1,4 @@
-package emp.cafeteria.model;
+package com.startbucks.models;
 
 import java.util.List;
 
@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import emp.cafeteria.entity.bean.Rol;
-import emp.cafeteria.persistence.RolRepository;
-import emp.cafeteria.usecase.RolUseCase;
+import com.startbucks.entitys.bean.Rol;
+import com.startbucks.persistence.RolRepository;
+import com.startbucks.usecase.RolUseCase;
 
 
 @Service
-public class RolModel implements RolUseCase{
+public class RolModel implements RolUseCase {
 
 	@Autowired
 	private RolRepository rolRepository;

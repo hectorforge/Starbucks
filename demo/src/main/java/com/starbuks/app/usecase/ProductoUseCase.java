@@ -1,14 +1,13 @@
-package com.starbuks.app.usecase;
+package com.startbucks.usecase;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.starbuks.app.entitys.bean.Producto;
+import com.startbucks.entitys.bean.Producto;
 
 public interface ProductoUseCase {
 
-    
 	public List<Producto> findAll();
 
     public List<Producto> findByActivoTrue();
@@ -27,5 +26,4 @@ public interface ProductoUseCase {
 
     
     public void deleteById(Long id);
-
 }

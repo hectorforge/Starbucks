@@ -1,11 +1,11 @@
-package com.starbuks.app.usecase;
+package com.startbucks.usecase;
 
-import com.starbuks.app.entitys.bean.Categoria;
+import com.startbucks.entitys.bean.Categoria;
 import java.util.List;
 
 public interface CategoriaUseCase {
 
-    // CRUD
+	 // CRUD
     List<Categoria> listar();
     Categoria obtenerPorId(Long id);
     Categoria registrar(Categoria categoria);

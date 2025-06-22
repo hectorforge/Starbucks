@@ -1,15 +1,15 @@
-package com.starbuks.app.persistence;
+package com.startbucks.persistence;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.starbuks.app.entitys.bean.Categoria;
-
+import com.startbucks.entitys.bean.Categoria;
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
-    List<Categoria> findByActivoTrue();
+	public List<Categoria> findByActivoTrue();
     boolean existsByNombreIgnoreCase(String nombre);
+    
 }

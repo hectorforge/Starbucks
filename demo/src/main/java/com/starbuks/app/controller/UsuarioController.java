@@ -1,4 +1,4 @@
-package emp.cafeteria.controller;
+package com.startbucks.controller;
 
 import java.util.List;
 
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import emp.cafeteria.entity.bean.Usuario;
-import emp.cafeteria.usecase.UsuarioUseCase;
+import com.startbucks.entitys.bean.Usuario;
+import com.startbucks.usecase.UsuarioUseCase;
 
 @RestController
 @RequestMapping({"/","/usuarios","/home"})
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioUseCase usuarioUseCase;
 	
@@ -57,5 +57,3 @@ public class UsuarioController {
 	        return usuarioUseCase.findByNombreStartingWith(nombre);
 	    }
 }
-
-

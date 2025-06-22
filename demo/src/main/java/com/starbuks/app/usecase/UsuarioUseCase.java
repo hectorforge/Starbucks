@@ -1,14 +1,14 @@
-package emp.cafeteria.usecase;
+package com.startbucks.usecase;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import emp.cafeteria.entity.bean.Usuario;
+import com.startbucks.entitys.bean.Usuario;
 
 @Component
 public interface UsuarioUseCase {
-	
-    List<Usuario> listarUsuarios();
+
+	List<Usuario> listarUsuarios();
 
     List<Usuario> findByEmail(String email);
 
@@ -17,4 +17,5 @@ public interface UsuarioUseCase {
     List<Usuario> findByNombreStartingWith(String nombre);
 
     Integer actualizarUsuario(String nombre, Integer idUsuario);
+
 }

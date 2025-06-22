@@ -1,9 +1,9 @@
-package com.starbuks.app.models;
+package com.startbucks.models;
 
-import com.starbuks.app.entitys.bean.Categoria;
-import com.starbuks.app.persistence.CategoriaRepository;
-import com.starbuks.app.persistence.ProductoRepository;
-import com.starbuks.app.usecase.CategoriaUseCase;
+import com.startbucks.entitys.bean.Categoria;
+import com.startbucks.persistence.CategoriaRepository;
+import com.startbucks.persistence.ProductoRepository;
+import com.startbucks.usecase.CategoriaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,46 +13,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaModel implements CategoriaUseCase {
 
-    private final CategoriaRepository _categoriaRepository;
-    private final ProductoRepository _productoRepository;
+	 private final CategoriaRepository _categoriaRepository;
+	    private final ProductoRepository _productoRepository;
 
-    @Override
-    public List<Categoria> listar() {
-        return _categoriaRepository.findAll();
-    }
+	    @Override
+	    public List<Categoria> listar() {
+	        return _categoriaRepository.findAll();
+	    }
 
-    @Override
-    public Categoria obtenerPorId(Long id) {
-        return _categoriaRepository.findById(id).orElse(null);
-    }
+	    @Override
+	    public Categoria obtenerPorId(Long id) {
+	        return _categoriaRepository.findById(id).orElse(null);
+	    }
 
-    @Override
-    public Categoria registrar(Categoria categoria) {
-        return _categoriaRepository.save(categoria);
-    }
+	    @Override
+	    public Categoria registrar(Categoria categoria) {
+	        return _categoriaRepository.save(categoria);
+	    }
 
-    @Override
-    public Categoria actualizar(Categoria categoria) {
-        return _categoriaRepository.save(categoria);
-    }
+	    @Override
+	    public Categoria actualizar(Categoria categoria) {
+	        return _categoriaRepository.save(categoria);
+	    }
 
-    @Override
-    public void eliminar(Long id) {
-        _categoriaRepository.deleteById(id);
-    }
+	    @Override
+	    public void eliminar(Long id) {
+	        _categoriaRepository.deleteById(id);
+	    }
 
-    @Override
-    public List<Categoria> listarActivas() {
-        return _categoriaRepository.findByActivoTrue();
-    }
+	    @Override
+	    public List<Categoria> listarActivas() {
+	        return _categoriaRepository.findByActivoTrue();
+	    }
 
-    @Override
-    public boolean existeCategoriaConNombre(String nombre) {
-        return _categoriaRepository.existsByNombreIgnoreCase(nombre);
-    }
+	    @Override
+	    public boolean existeCategoriaConNombre(String nombre) {
+	        return _categoriaRepository.existsByNombreIgnoreCase(nombre);
+	    }
 
-    @Override
-    public long contarProductosPorCategoria(Long categoriaId) {
-        return _productoRepository.countByCategoriaId_Id(categoriaId);
-    }
+	    @Override
+	    public long contarProductosPorCategoria(Long categoriaId) {
+	        return _productoRepository.countByCategoriaId_Id(categoriaId);
+	    }
 }

@@ -1,10 +1,10 @@
-package emp.cafeteria.controller;
+package com.starbuks.app.controller;
 
 import java.util.List;
 
-import emp.cafeteria.entity.bean.Rol;
+import com.starbuks.app.entitys.bean.Rol;
 
-import emp.cafeteria.usecase.RolUseCase;
+import com.starbuks.app.usecase.RolUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping({"/","/cafeteria","/home"})
 public class RolController {
-	 
+
 	@Autowired
 	private RolUseCase rolUseCase;
 	
@@ -48,5 +48,4 @@ public class RolController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe: "+ idRol);
 		}
 	}
-
 }
