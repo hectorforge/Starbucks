@@ -21,9 +21,4 @@ public Rol getById(Integer Id);
 	@Query("SELECT e FROM Rol e")
 	public List<Rol> ListarRoles();
 	
-	@Transactional
-	@Modifying
-	@Query("UPDATE Rol e SET e.descripcion = :descripcion WHERE e.idRol = :idRol")
-	public Rol ActualizarRol(@Param("descripcion")String descripcion, @Param("idRol") Integer idRol);
-	
 }

@@ -11,6 +11,5 @@ public interface RolUseCase {
 public List<Rol> findByDescripcion(String descripcion);
 	
 	public List<Rol> ListarRoles();
-	
-	public Integer ActualizarRol(String descripcion, Integer idRol);
+
 }

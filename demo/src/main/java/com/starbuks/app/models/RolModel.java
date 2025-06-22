@@ -27,9 +27,4 @@ public class RolModel implements RolUseCase {
 		return rolRepository.findByDescripcion(descripcion);
 	}
 
-	@Override
-	public Integer ActualizarRol(@PathVariable String descripcion, @PathVariable Integer idRol) {
-		Rol result = rolRepository.ActualizarRol(descripcion, idRol);
-		return result != null ? 1 : 0;
-	}
 }

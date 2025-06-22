@@ -30,22 +30,4 @@ public class RolController {
 	public List<Rol> ListarRoles(){
 		return rolUseCase.ListarRoles();
 	}
-	
-	@PutMapping("/actualizar/{descripcion}/{idRol}")
-	public Integer ActualizarRol(@PathVariable String descripcion, @PathVariable Integer idRol) {
-		return rolUseCase.ActualizarRol(descripcion, idRol);
-	}
-	
-	@PutMapping("/actualizarMensaje/{descripcion}/{idRol}")
-	public ResponseEntity<String> ActualizarRolMensaje(@PathVariable String descripcion, @PathVariable Integer idRol){
-		
-		Integer Rol = rolUseCase.ActualizarRol(descripcion, idRol);
-		
-		if(Rol>0) {
-			return ResponseEntity.ok("el rol del trabajador se registo con exito ..!");
-		}
-		else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol no existe: "+ idRol);
-		}
-	}
 } 

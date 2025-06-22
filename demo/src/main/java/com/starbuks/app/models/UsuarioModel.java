@@ -32,7 +32,7 @@ public class UsuarioModel implements UsuarioUseCase {
 
     @Override
     public List<Usuario> findByNombreStartingWith(String nombre) {
-        return usuarioRepository.findByNombreStartingWith(nombre);
+        return usuarioRepository.findByNombresStartingWith(nombre);
     }
 
     @Override
