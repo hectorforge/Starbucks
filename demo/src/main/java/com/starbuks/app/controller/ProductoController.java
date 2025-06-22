@@ -25,6 +25,7 @@ public class ProductoController {
 	public String listarProductos(Model model) {
 		List<Producto> productos = productoUseCase.findAll();
 		model.addAttribute("productos", productos);
+		System.out.println("Paso por el listar");
 		return "listar";
 	}
 
