@@ -12,7 +12,7 @@ public interface UsuarioUseCase {
 
     List<Usuario> findByEmail(String email);
 
-    List<Usuario> getById(String id);
+    Usuario getById(Long id);
 
     List<Usuario> findByNombreStartingWith(String nombre);
 

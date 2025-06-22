@@ -10,7 +10,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
 public List<Usuario> findByNombreStartingWith(String nombre);
 	
-	public List<Usuario> getById(String Id);
+	public Usuario getById(Long Id);
 	
 	public List<Usuario> findByEmail(String email);
 	

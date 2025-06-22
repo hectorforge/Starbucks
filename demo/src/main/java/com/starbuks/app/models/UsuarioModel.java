@@ -26,7 +26,7 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public List<Usuario> getById(String id) {
+    public Usuario getById(Long id) {
         return usuarioRepository.getById(id);
     }
 
