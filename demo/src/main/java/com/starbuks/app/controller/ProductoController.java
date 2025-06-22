@@ -1,74 +1,68 @@
 package com.starbuks.app.controller;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.entitys.bean.Categoria;
+import com.starbuks.app.usecase.CategoriaUseCase;
 import com.starbuks.app.usecase.ProductoUseCase;
 
-@RestController
-@RequestMapping("/api/productos")
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/productos")
+@RequiredArgsConstructor
 public class ProductoController {
 
-	 @Autowired
-	    private ProductoUseCase productoUseCase;
+	private final ProductoUseCase productoUseCase;
+	private final CategoriaUseCase categoriaUseCase;
 
+	// LISTAR TODOS LOS PRODUCTOS
+	@GetMapping
+	public String listarProductos(Model model) {
+		List<Producto> productos = productoUseCase.findAll();
+		model.addAttribute("productos", productos);
+		return "listar";
+	}
 
-	    @GetMapping
-	    public List<Producto> listarTodos() {
-	        return productoUseCase.findAll();
-	    }
+	// FORMULARIO PARA CREAR
+	@GetMapping("/nuevo")
+	public String mostrarFormularioNuevo(Model model) {
+		model.addAttribute("producto", new Producto());
+		model.addAttribute("categorias", categoriaUseCase.listar());
+		return "producto/formulario";
+	}
 
+	// GUARDAR NUEVO PRODUCTO
+	@PostMapping("/guardar")
+	public String guardarProducto(@ModelAttribute Producto producto) {
+		productoUseCase.save(producto);
+		return "redirect:/productos";
+	}
 
-	    @GetMapping("/activos")
-	    public List<Producto> listarActivos() {
-	        return productoUseCase.findByActivoTrue();
-	    }
+	// EDITAR
+	@GetMapping("/editar/{id}")
+	public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+		Producto producto = productoUseCase.findById(id).orElseThrow();
+		model.addAttribute("producto", producto);
+		model.addAttribute("categorias", categoriaUseCase.listar());
+		return "producto/formulario";
+	}
 
+	// ACTUALIZAR
+	@PostMapping("/actualizar/{id}")
+	public String actualizarProducto(@PathVariable Long id, @ModelAttribute Producto producto) {
+		productoUseCase.update(id, producto);
+		return "redirect:/productos";
+	}
 
-	    @GetMapping("/{id}")
-	    public Optional<Producto> obtenerPorIdActivo(@PathVariable Long id) {
-	        return productoUseCase.findByIdAndActivoTrue(id);
-	    }
-
-
-	    @GetMapping("/buscar/nombre")
-	    public List<Producto> buscarPorNombre(@RequestParam String nombre) {
-	        return productoUseCase.findByNombreContainingIgnoreCase(nombre);
-	    }
-
-
-	    @GetMapping("/buscar/precio")
-	    public List<Producto> buscarPorPrecio(
-	            @RequestParam BigDecimal min,
-	            @RequestParam BigDecimal max
-	    ) {
-	        return productoUseCase.findByPrecioBetween(min, max);
-	    }
-	 //
-	    @GetMapping("/buscar/stock")
-	    public List<Producto> buscarPorStockMinimo(@RequestParam int cantidad) {
-	        return productoUseCase.findByStockGreaterThanEqual(cantidad);
-	    }
-
-	    @DeleteMapping("/{id}")
-	    public void eliminarProducto(@PathVariable Long id) {
-	        productoUseCase.deleteById(id);
-	    }
-	    @PostMapping
-	    public Producto crearProducto(@RequestBody Producto producto) {
-	        return productoUseCase.save(producto);
-	    }
-
-	    @PutMapping("/{id}")
-	    public Producto actualizarProducto(
-	        @PathVariable Long id,
-	        @RequestBody Producto producto
-	    ) {
-	        return productoUseCase.update(id, producto);
-	    }
+	// ELIMINAR
+	@GetMapping("/eliminar/{id}")
+	public String eliminarProducto(@PathVariable Long id) {
+		productoUseCase.deleteById(id);
+		return "redirect:/productos";
+	}
 }
