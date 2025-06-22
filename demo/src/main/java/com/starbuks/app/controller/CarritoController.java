@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/carrito")
+@RequestMapping("/api/carrito")
 public class CarritoController {
 
     @Autowired

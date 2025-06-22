@@ -14,7 +14,7 @@ import com.starbuks.app.persistence.CarritoItemRepository;
 import com.starbuks.app.persistence.CarritoRepository;
 
 @Controller
-@RequestMapping("/web/carrito")
+@RequestMapping("/api/web-carrito")
 public class CarritoWebController {
 
 	 @Autowired

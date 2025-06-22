@@ -16,7 +16,7 @@ import com.starbuks.app.entitys.bean.Usuario;
 import com.starbuks.app.usecase.UsuarioUseCase;
 
 @RestController
-@RequestMapping({"/","/usuarios","/home"})
+@RequestMapping("/api/usuario")
 public class UsuarioController {
 
 	@Autowired
