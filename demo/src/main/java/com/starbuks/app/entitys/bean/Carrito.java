@@ -1,4 +1,4 @@
-package com.startbucks.entitys.bean;
+package com.starbuks.app.entitys.bean;
 
 import java.time.LocalDateTime;
 
