@@ -91,4 +91,7 @@ public class ProductoModel implements ProductoUseCase {
 			return productoRepository.save(productoExistente);
 		}
 
+		public List<Producto> listarActivos() {
+	        return productoRepository.findByActivoTrue();
+	    }
 }

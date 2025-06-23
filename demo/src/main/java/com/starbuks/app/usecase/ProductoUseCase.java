@@ -26,4 +26,8 @@ public interface ProductoUseCase {
 
     
     public void deleteById(Long id);
+    
+    public List<Producto> listarActivos();
+    
+    
 }
