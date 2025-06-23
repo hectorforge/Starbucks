@@ -1,6 +1,7 @@
 package com.starbuks.app.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.starbuks.app.entitys.bean.Rol;
 import jakarta.transaction.Transactional;
@@ -18,5 +19,6 @@ public interface RolRepository extends JpaRepository<Rol, Long> {
 	
 	@Query("SELECT e FROM Rol e")
 	public List<Rol> ListarRoles();
-	
+
+	Optional<Rol> findByNombre(String nombre);
 }

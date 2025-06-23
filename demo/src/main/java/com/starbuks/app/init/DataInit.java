@@ -2,9 +2,12 @@ package com.starbuks.app.init;
 
 import com.starbuks.app.entitys.bean.Categoria;
 import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.entitys.bean.Rol;
+import com.starbuks.app.entitys.bean.Usuario;
 import com.starbuks.app.persistence.CategoriaRepository;
 import com.starbuks.app.persistence.ProductoRepository;
-
+import com.starbuks.app.persistence.RolRepository;
+import com.starbuks.app.persistence.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,10 +21,17 @@ public class DataInit {
 
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
 
     @PostConstruct
     public void initData() {
-        if (categoriaRepository.count() == 0 && productoRepository.count() == 0) {
+        if (categoriaRepository.count() == 0 &&
+                productoRepository.count() == 0 &&
+                rolRepository.count() == 0 &&
+                usuarioRepository.count() == 0) {
+
+            // 🔹 CATEGORÍAS
             List<Categoria> categorias = List.of(
                     new Categoria(null, "Café", "Bebidas a base de café", true),
                     new Categoria(null, "Té", "Variedades de té caliente y frío", true),
@@ -34,8 +44,9 @@ public class DataInit {
                     new Categoria(null, "Promociones", "Productos en oferta", true),
                     new Categoria(null, "Edición Limitada", "Productos especiales por temporada", true)
             );
-
             categoriaRepository.saveAll(categorias);
+
+            // 🔹 PRODUCTOS
             List<Producto> productos = List.of(
                     Producto.builder().nombre("Latte Vainilla").descripcion("Café con leche y esencia de vainilla").stock(50).precio(BigDecimal.valueOf(12.90)).activo(true).codigo("LAT001").imagenUrl("https://www.starbucksathome.com/pe/sites/default/files/2021-03/Vanilla-Latte-4.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(0)).build(),
                     Producto.builder().nombre("Té Chai Latte").descripcion("Té negro especiado con leche").stock(35).precio(BigDecimal.valueOf(10.50)).activo(true).codigo("TEA002").imagenUrl("https://carorocco.com/wp-content/uploads/2021/03/Te-Chai-Latte-VERTICAL.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(1)).build(),
@@ -48,10 +59,59 @@ public class DataInit {
                     Producto.builder().nombre("Pack Promoción Desayuno").descripcion("Café + sándwich + galleta").stock(10).precio(BigDecimal.valueOf(18.00)).activo(true).codigo("PRO009").imagenUrl("https://www.starbucks.pe/Multimedia/productos/DESAYUNO_PARA_DOS_V4.png").unidadMedida("pack").peso(0.6).categoriaId(categorias.get(8)).build(),
                     Producto.builder().nombre("Pumpkin Spice Latte").descripcion("Café con leche sabor calabaza - Edición limitada").stock(12).precio(BigDecimal.valueOf(15.00)).activo(true).codigo("LTD010").imagenUrl("https://coffeecopycat.com/wp-content/uploads/2023/10/IcedPumpkinSpiceLatte-1200-x-1200.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(9)).build()
             );
-
             productoRepository.saveAll(productos);
 
-            System.out.println("🟢 Datos insertados correctamente.");
+// 🔹 ROLES
+            rolRepository.save(Rol.builder().nombre("ADMIN").descripcion("Administrador del sistema").build());
+            rolRepository.save(Rol.builder().nombre("USER").descripcion("Cliente de la tienda").build());
+
+// 🔹 Buscar roles desde la BD (asegurando persistencia)
+            Rol rolAdmin = rolRepository.findByNombre("ADMIN").orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
+            System.out.println(rolAdmin);
+            Rol rolUser = rolRepository.findByNombre("USER").orElseThrow(() -> new RuntimeException("Rol USER no encontrado"));
+
+// 🔹 USUARIOS
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Admin").apellidos("Uno").email("admin1@starbuks.com")
+                    .telefono("900000001").username("admin1").password("admin123")
+                    .activo(true).rol(rolAdmin).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Admin").apellidos("Dos").email("admin2@starbuks.com")
+                    .telefono("900000002").username("admin2").password("admin123")
+                    .activo(true).rol(rolAdmin).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Uno").email("user1@starbuks.com")
+                    .telefono("900000003").username("user1").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Dos").email("user2@starbuks.com")
+                    .telefono("900000004").username("user2").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Tres").email("user3@starbuks.com")
+                    .telefono("900000005").username("user3").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Cuatro").email("user4@starbuks.com")
+                    .telefono("900000006").username("user4").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Cinco").email("user5@starbuks.com")
+                    .telefono("900000007").username("user5").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            usuarioRepository.save(Usuario.builder()
+                    .nombres("Usuario").apellidos("Seis").email("user6@starbuks.com")
+                    .telefono("900000008").username("user6").password("user123")
+                    .activo(true).rol(rolUser).build());
+
+            System.out.println("🟢 Usuarios insertados correctamente.");
         }
     }
 }
