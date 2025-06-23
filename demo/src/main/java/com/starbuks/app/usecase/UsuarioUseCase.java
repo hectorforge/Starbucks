@@ -1,21 +1,23 @@
 package com.starbuks.app.usecase;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
 import com.starbuks.app.entitys.bean.Usuario;
 
-@Component
+import java.util.List;
+import java.util.Optional;
+
 public interface UsuarioUseCase {
 
-	List<Usuario> listarUsuarios();
+    List<Usuario> listarUsuarios();
+
+    Optional<Usuario> findById(Long id);
 
     List<Usuario> findByEmail(String email);
 
-    Usuario getById(Long id);
-
     List<Usuario> findByNombreStartingWith(String nombre);
 
-    Integer actualizarUsuario(String nombre, Integer idUsuario);
+    Usuario save(Usuario usuario);
 
+    Usuario update(Long id, Usuario usuario);
+
+    void deleteById(Long id);
 }

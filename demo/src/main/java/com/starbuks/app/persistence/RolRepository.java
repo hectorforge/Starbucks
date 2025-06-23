@@ -14,9 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RolRepository extends JpaRepository<Rol, Long> {
 
-public Rol getById(Integer Id);
-	
-	public List<Rol> findByDescripcion(String descripcion);
+	public Rol getById(Integer Id);
 	
 	@Query("SELECT e FROM Rol e")
 	public List<Rol> ListarRoles();

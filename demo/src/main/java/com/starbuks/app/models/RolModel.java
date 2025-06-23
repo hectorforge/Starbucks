@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.starbuks.app.entitys.bean.Rol;
 import com.starbuks.app.persistence.RolRepository;
@@ -23,8 +22,7 @@ public class RolModel implements RolUseCase {
 	}
 
 	@Override
-	public List<Rol> findByDescripcion(String descripcion) {
-		return rolRepository.findByDescripcion(descripcion);
+	public Rol findById(Long id) {
+		return rolRepository.getById(id);
 	}
-
 }

@@ -1,59 +1,113 @@
 package com.starbuks.app.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.starbuks.app.dtos.UsuarioDTO;
+import com.starbuks.app.entitys.bean.Rol;
 import com.starbuks.app.entitys.bean.Usuario;
+import com.starbuks.app.usecase.RolUseCase;
 import com.starbuks.app.usecase.UsuarioUseCase;
 
-@RestController
-@RequestMapping("/api/usuario")
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-	@Autowired
-	private UsuarioUseCase usuarioUseCase;
-	
-	@GetMapping("/acceso")
-	public String acceso() {
-		return "Bienvenido al software de gestion de venta";
+	private final UsuarioUseCase usuarioUseCase;
+	private final RolUseCase rolUseCase;
+
+	// LISTAR TODOS LOS USUARIOS
+	@GetMapping
+	public String listarUsuarios(Model model) {
+		List<Usuario> usuarios = usuarioUseCase.listarUsuarios();
+		model.addAttribute("usuarios", usuarios);
+		return "usuario/listar";
 	}
-	
-	 @GetMapping("/listar")
-	    public List<Usuario> listarUsuarios() {
-	        return usuarioUseCase.listarUsuarios();
-	    }
 
-	    @PutMapping("/actualizar/{nombre}/{idUsuario}")
-	    public Integer actualizarUsuario(@PathVariable String nombre, @PathVariable Integer idUsuario) {
-	        return usuarioUseCase.actualizarUsuario(nombre, idUsuario);
-	    }
+	// FORMULARIO PARA NUEVO USUARIO
+	@GetMapping("/nuevo")
+	public String mostrarFormularioNuevo(Model model) {
+		model.addAttribute("usuario", new UsuarioDTO());
+		model.addAttribute("usuarioId", null);
+		model.addAttribute("roles", rolUseCase.ListarRoles());
+		return "usuario/formulario";
+	}
 
-	    @PutMapping("/actualizarMensaje/{descripcion}/{idUsuario}")
-	    public ResponseEntity<String> actualizarUsuarioMensaje(@PathVariable String descripcion, @PathVariable Integer idUsuario) {
-	        Integer resultado = usuarioUseCase.actualizarUsuario(descripcion, idUsuario);
-	        if (resultado > 0) {
-	            return ResponseEntity.ok("El usuario se registró con éxito.");
-	        } else {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe: " + idUsuario);
-	        }
-	    }
+	// GUARDAR USUARIO NUEVO
+	@PostMapping("/guardar")
+	public String guardarUsuario(@ModelAttribute UsuarioDTO dto) {
+		Usuario usuario = convertirDtoAEntidad(dto);
+		usuarioUseCase.save(usuario);
+		return "redirect:/usuarios";
+	}
 
-	    @GetMapping("/buscar/email")
-	    public List<Usuario> findByEmail(@RequestParam String email) {
-	        return usuarioUseCase.findByEmail(email);
-	    }
+	// FORMULARIO PARA EDITAR USUARIO
+	@GetMapping("/editar/{id}")
+	public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+		Usuario usuario = usuarioUseCase.findById(id).orElseThrow();
 
-	    @GetMapping("/buscar/nombre")
-	    public List<Usuario> findByNombreStartingWith(@RequestParam String nombre) {
-	        return usuarioUseCase.findByNombreStartingWith(nombre);
-	    }
+		UsuarioDTO dto = new UsuarioDTO();
+		dto.setNombres(usuario.getNombres());
+		dto.setApellidos(usuario.getApellidos());
+		dto.setEmail(usuario.getEmail());
+		dto.setTelefono(usuario.getTelefono());
+		dto.setUsername(usuario.getUsername());
+		dto.setPassword(usuario.getPassword());
+		dto.setActivo(usuario.getActivo());
+
+		if (usuario.getRol() != null) {
+			dto.setRolId(usuario.getRol().getId());
+		}
+
+		model.addAttribute("usuario", dto);
+		model.addAttribute("usuarioId", id);
+		model.addAttribute("roles", rolUseCase.ListarRoles());
+		return "usuario/formulario";
+	}
+
+	// ACTUALIZAR USUARIO EXISTENTE
+	@PostMapping("/actualizar/{id}")
+	public String actualizarUsuario(@PathVariable Long id, @ModelAttribute UsuarioDTO dto) {
+		Usuario actualizado = convertirDtoAEntidad(dto, id);
+		usuarioUseCase.update(id, actualizado);
+		return "redirect:/usuarios";
+	}
+
+	// ELIMINAR USUARIO
+	@GetMapping("/eliminar/{id}")
+	public String eliminarUsuario(@PathVariable Long id) {
+		usuarioUseCase.deleteById(id);
+		return "redirect:/usuarios";
+	}
+
+	// Convertir DTO a Entidad con ID (para editar)
+	private Usuario convertirDtoAEntidad(UsuarioDTO dto, Long id) {
+		Usuario usuario = convertirDtoAEntidad(dto);
+		usuario.setId(id);
+		return usuario;
+	}
+
+	// Convertir DTO a Entidad (común para guardar/editar)
+	private Usuario convertirDtoAEntidad(UsuarioDTO dto) {
+		Usuario u = new Usuario();
+		u.setNombres(dto.getNombres());
+		u.setApellidos(dto.getApellidos());
+		u.setEmail(dto.getEmail());
+		u.setTelefono(dto.getTelefono());
+		u.setUsername(dto.getUsername());
+		u.setPassword(dto.getPassword());
+		u.setActivo(dto.getActivo());
+
+		if (dto.getRolId() != null) {
+			Rol rol = rolUseCase.findById(dto.getRolId());
+			u.setRol(rol);
+		}
+
+		return u;
+	}
 }
