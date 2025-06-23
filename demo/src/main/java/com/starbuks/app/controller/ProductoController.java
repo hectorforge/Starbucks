@@ -33,6 +33,7 @@ public class ProductoController {
 	@GetMapping("/nuevo")
 	public String mostrarFormularioNuevo(Model model) {
 		model.addAttribute("producto", new ProductoDTO());
+		model.addAttribute("productoId", null);
 		model.addAttribute("categorias", categoriaUseCase.listar());
 		return "producto/formulario";
 	}
@@ -60,6 +61,7 @@ public class ProductoController {
 		dto.setImagenUrl(producto.getImagenUrl());
 		dto.setUnidadMedida(producto.getUnidadMedida());
 		dto.setPeso(producto.getPeso());
+
 		if (producto.getCategoriaId() != null)
 			dto.setCategoriaId(producto.getCategoriaId().getId());
 
@@ -72,7 +74,7 @@ public class ProductoController {
 	// ACTUALIZAR PRODUCTO
 	@PostMapping("/actualizar/{id}")
 	public String actualizarProducto(@PathVariable Long id, @ModelAttribute ProductoDTO dto) {
-		Producto actualizado = convertirDtoAEntidad(dto);
+		Producto actualizado = convertirDtoAEntidad(dto, id);
 		productoUseCase.update(id, actualizado);
 		return "redirect:/productos";
 	}
@@ -84,7 +86,14 @@ public class ProductoController {
 		return "redirect:/productos";
 	}
 
-	// Convertir DTO a Entidad
+	// Convertir DTO a Entidad (nuevo)
+	private Producto convertirDtoAEntidad(ProductoDTO dto, Long id) {
+		Producto p = convertirDtoAEntidad(dto);
+		p.setId(id);
+		return p;
+	}
+
+	// Convertir DTO a Entidad (base)
 	private Producto convertirDtoAEntidad(ProductoDTO dto) {
 		Producto p = new Producto();
 		p.setNombre(dto.getNombre());
@@ -101,7 +110,6 @@ public class ProductoController {
 			Categoria categoria = categoriaUseCase.obtenerPorId(dto.getCategoriaId());
 			p.setCategoriaId(categoria);
 		}
-
 		return p;
 	}
 }

@@ -70,21 +70,25 @@ public class ProductoModel implements ProductoUseCase {
 
 	        return productoRepository.save(producto);
 	    }
-	    
-	    @Override
-	    public Producto update(Long id, Producto producto) {
-	       
-	        Producto productoExistente = productoRepository.findById(id)
-	            .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
 
-	        
-	        if (producto.getNombre() != null) {
-	            productoExistente.setNombre(producto.getNombre());
-	        }
-	        if (producto.getDescripcion() != null) {
-	            productoExistente.setDescripcion(producto.getDescripcion());
-	        }
-	        
-	        return productoRepository.save(productoExistente);
-	    }
+		@Override
+		public Producto update(Long id, Producto producto) {
+			Producto productoExistente = productoRepository.findById(id)
+					.orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+
+			productoExistente.setNombre(producto.getNombre());
+			productoExistente.setDescripcion(producto.getDescripcion());
+			productoExistente.setPrecio(producto.getPrecio());
+			productoExistente.setStock(producto.getStock());
+			productoExistente.setActivo(producto.getActivo());
+			productoExistente.setCodigo(producto.getCodigo());
+			productoExistente.setImagenUrl(producto.getImagenUrl());
+			productoExistente.setUnidadMedida(producto.getUnidadMedida());
+			productoExistente.setPeso(producto.getPeso());
+			productoExistente.setCategoriaId(producto.getCategoriaId());
+			productoExistente.setFechaActualizacion(LocalDateTime.now()); // Opcional
+
+			return productoRepository.save(productoExistente);
+		}
+
 }
