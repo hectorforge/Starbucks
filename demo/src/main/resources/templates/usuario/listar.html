@@ -81,7 +81,7 @@
     <h1 class="mb-4 text-center">👥 Usuarios Registrados</h1>
 
     <div class="d-flex justify-content-end mb-3">
-        <a th:href="@{/templates/usuario/nuevo}" class="btn btn-success">
+        <a th:href="@{/usuarios/nuevo}" class="btn btn-success">
             <i class="bi bi-person-plus-fill"></i> Nuevo Usuario
         </a>
     </div>
@@ -107,7 +107,7 @@
                     </p>
                     <p class="card-text">
                         <strong><i class="bi bi-shield-lock-fill"></i> Rol:</strong>
-                        <span th:text="${usuario.rolId}"></span>
+                        <span th:text="${usuario.getRol().getNombre()}"></span>
                     </p>
                     <p class="card-text">
                         <strong><i class="bi bi-check-circle"></i> Estado:</strong>

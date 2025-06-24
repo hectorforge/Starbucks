@@ -65,6 +65,7 @@ public class UsuarioModel implements UsuarioUseCase {
         Usuario existente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
 
+        existente.setId(usuario.getId());
         existente.setNombres(usuario.getNombres());
         existente.setApellidos(usuario.getApellidos());
         existente.setEmail(usuario.getEmail());

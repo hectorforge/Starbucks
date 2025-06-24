@@ -1,6 +1,7 @@
 package com.starbuks.app.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,4 +18,6 @@ public List<Usuario> findByNombresStartingWith(String nombre);
 
 	@Query("SELECT u FROM Usuario u")
 	public List<Usuario> ListarUsuario();
+
+	Optional<Usuario> findByUsername(String username);
 }

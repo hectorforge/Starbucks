@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="${productoId == null} ? 'Nuevo Producto' : 'Editar Producto'"></title>
+  <title th:text="${usuarioId == null} ? 'Nuevo Usuario' : 'Editar Usuario'"></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -12,158 +12,108 @@
     <a class="navbar-brand d-flex align-items-center" href="#">
       <i class="bi bi-cup-hot me-2"></i> Starbucks Admin
     </a>
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarAdmin" aria-controls="navbarAdmin" aria-expanded="false"
             aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarAdmin">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/productos}">
-            <i class="bi bi-grid-1x2-fill"></i> Dashboard
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/productos}">
-            <i class="bi bi-box-seam"></i> Productos
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/categorias}">
-            <i class="bi bi-tags-fill"></i> Categorías
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/templates/usuario}">
-            <i class="bi bi-people-fill"></i> Usuarios
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/reportes}">
-            <i class="bi bi-bar-chart-fill"></i> Reportes
-          </a>
-        </li>
-      </ul>
-
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Admin
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
-            <li><a class="dropdown-item" th:href="@{/perfil}"><i class="bi bi-person"></i> Perfil</a></li>
-            <li><a class="dropdown-item" th:href="@{/configuracion}"><i class="bi bi-gear"></i> Configuración</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
-          </ul>
-        </li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/productos}"><i class="bi bi-box-seam"></i> Productos</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/categorias}"><i class="bi bi-tags-fill"></i> Categorías</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/usuarios}"><i class="bi bi-people-fill"></i> Usuarios</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
 <div class="container mt-4">
-<h1 class="mb-4 text-center" th:text="${productoId == null} ? 'Nuevo Producto' : 'Editar Producto'"></h1>
+  <h1 class="mb-4 text-center" th:text="${usuarioId == null} ? 'Nuevo Usuario' : 'Editar Usuario'"></h1>
+  <div th:if="${error}" class="alert alert-danger" role="alert">
+    <span th:text="${error}"></span>
+  </div>
 
-<form th:action="@{${productoId == null} ? '/productos/guardar' : '/productos/actualizar/' + ${productoId}}"
-      th:object="${producto}" method="post">
+  <form th:action="@{${usuarioId == null} ? '/usuarios/guardar' : '/usuarios/actualizar/' + ${usuarioId}}"
+        th:object="${usuario}" method="post">
 
-  <div class="mb-3">
-    <label for="nombre">Nombre:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
-      <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Nombre del producto" required />
+    <div class="mb-3">
+      <label for="nombres">Nombres:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+        <input type="text" id="nombres" th:field="*{nombres}" class="form-control" required placeholder="Nombres del usuario" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="descripcion">Descripción:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-      <textarea id="descripcion" th:field="*{descripcion}" class="form-control" placeholder="Describe el producto" required></textarea>
+    <div class="mb-3">
+      <label for="apellidos">Apellidos:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+        <input type="text" id="apellidos" th:field="*{apellidos}" class="form-control" required placeholder="Apellidos del usuario" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="precio">Precio:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-      <input type="number" id="precio" th:field="*{precio}" class="form-control" step="0.01" placeholder="0.00" required />
+    <div class="mb-3">
+      <label for="email">Correo Electrónico:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="email" id="email" th:field="*{email}" class="form-control" required placeholder="usuario@correo.com" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="stock">Stock:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-      <input type="number" id="stock" th:field="*{stock}" class="form-control" placeholder="Cantidad en stock" required />
+    <div class="mb-3">
+      <label for="telefono">Teléfono:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+        <input type="text" id="telefono" th:field="*{telefono}" class="form-control" placeholder="Número de teléfono" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="categoriaId">Categoría:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-tags"></i></span>
-      <select id="categoriaId" th:field="*{categoriaId}" class="form-select" required>
-        <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
-      </select>
+    <div class="mb-3">
+      <label for="username">Username:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+        <input type="text" id="username" th:field="*{username}" class="form-control" required placeholder="Nombre de usuario" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="codigo">Código:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
-      <input type="text" id="codigo" th:field="*{codigo}" class="form-control" placeholder="Código del producto" />
+    <div class="mb-3">
+      <label for="password">Contraseña:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+        <input type="text" id="password" th:field="*{password}" class="form-control" required placeholder="Contraseña" />
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="imagenUrl">URL de Imagen:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-image"></i></span>
-      <input type="text" id="imagenUrl" th:field="*{imagenUrl}" class="form-control" placeholder="https://..." />
+    <div class="mb-3">
+      <label for="rolId">Rol:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+        <select id="rolId" th:field="*{rolId}" class="form-select" required>
+<!--          <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}">Rol</option>-->
+          <option th:each="rol : ${roles}"
+                  th:value="${rol.id}"
+                  th:text="${rol.nombre}"
+                  th:selected="${rol.id == usuario.rolId}"></option>
+
+        </select>
+      </div>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="unidadMedida">Unidad de Medida:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-rulers"></i></span>
-      <input type="text" id="unidadMedida" th:field="*{unidadMedida}" class="form-control" placeholder="Ej: ml, gr, unidad..." />
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo" />
+      <label class="form-check-label" for="activo">Usuario activo</label>
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="peso">Peso:</label>
-    <div class="input-group">
-      <span class="input-group-text"><i class="bi bi-bag"></i></span>
-      <input type="number" step="0.01" id="peso" th:field="*{peso}" class="form-control" placeholder="Peso del producto (kg)" />
-    </div>
-  </div>
-
-  <div class="form-check mb-3">
-    <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo" />
-    <label class="form-check-label" for="activo">Producto activo</label>
-  </div>
-
-  <button type="submit" class="btn btn-success">
-    <i class="bi bi-save"></i>
-    <span th:text="${productoId == null} ? 'Guardar' : 'Actualizar'"></span>
-  </button>
-  <a th:href="@{/productos}" class="btn btn-secondary">
-    <i class="bi bi-arrow-left"></i> Cancelar
-  </a>
-</form>
+    <button type="submit" class="btn btn-success">
+      <i class="bi bi-save"></i>
+      <span th:text="${usuarioId == null} ? 'Guardar' : 'Actualizar'"></span>
+    </button>
+    <a th:href="@{/usuarios}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Cancelar
+    </a>
+  </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
