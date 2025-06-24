@@ -2,8 +2,6 @@ package com.starbuks.app.init;
 
 import com.starbuks.app.entitys.bean.Categoria;
 import com.starbuks.app.entitys.bean.Producto;
-import com.starbuks.app.entitys.bean.Rol;
-import com.starbuks.app.entitys.bean.Usuario;
 import com.starbuks.app.persistence.CategoriaRepository;
 import com.starbuks.app.persistence.ProductoRepository;
 import com.starbuks.app.persistence.RolRepository;
@@ -17,21 +15,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class DataInit {
+public class DataInitCategoriasProductos {
 
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final RolRepository rolRepository;
 
     @PostConstruct
     public void initData() {
-        if (categoriaRepository.count() == 0 &&
-                productoRepository.count() == 0 &&
-                rolRepository.count() == 0 &&
-                usuarioRepository.count() == 0) {
-
-            // 🔹 CATEGORÍAS
+        if (categoriaRepository.count() == 0) {
             List<Categoria> categorias = List.of(
                     new Categoria(null, "Café", "Bebidas a base de café", true),
                     new Categoria(null, "Té", "Variedades de té caliente y frío", true),
@@ -45,73 +36,26 @@ public class DataInit {
                     new Categoria(null, "Edición Limitada", "Productos especiales por temporada", true)
             );
             categoriaRepository.saveAll(categorias);
+            System.out.println("🟢 Categorías insertadas.");
+        }
 
-            // 🔹 PRODUCTOS
+        if (productoRepository.count() == 0) {
+            List<Categoria> categorias = categoriaRepository.findAll();
+
             List<Producto> productos = List.of(
                     Producto.builder().nombre("Latte Vainilla").descripcion("Café con leche y esencia de vainilla").stock(50).precio(BigDecimal.valueOf(12.90)).activo(true).codigo("LAT001").imagenUrl("https://www.starbucksathome.com/pe/sites/default/files/2021-03/Vanilla-Latte-4.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(0)).build(),
                     Producto.builder().nombre("Té Chai Latte").descripcion("Té negro especiado con leche").stock(35).precio(BigDecimal.valueOf(10.50)).activo(true).codigo("TEA002").imagenUrl("https://carorocco.com/wp-content/uploads/2021/03/Te-Chai-Latte-VERTICAL.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(1)).build(),
                     Producto.builder().nombre("Brownie de Chocolate").descripcion("Brownie artesanal con nueces").stock(20).precio(BigDecimal.valueOf(8.00)).activo(true).codigo("REP003").imagenUrl("https://cdn.recetasderechupete.com/wp-content/uploads/2019/11/Brownie-1200x828.jpg").unidadMedida("unidad").peso(0.15).categoriaId(categorias.get(2)).build(),
                     Producto.builder().nombre("Frappuccino Caramelo").descripcion("Bebida fría de café con caramelo").stock(40).precio(BigDecimal.valueOf(13.50)).activo(true).codigo("BEB004").imagenUrl("https://sal-pimienta.com/wp-content/uploads/2023/10/Japon_Insta_Feed-2-4.jpg").unidadMedida("vaso").peso(0.4).categoriaId(categorias.get(3)).build(),
-                    Producto.builder().nombre("Galletas de Avena").descripcion("Galletas artesanales con avena y pasas").stock(30).precio(BigDecimal.valueOf(6.00)).activo(true).codigo("SNA005").imagenUrl("https://www.recetasnestle.cl/sites/default/files/styles/recipe_detail_desktop_new/public/srh_recipes/df2b52515a0d96b7e21123fe0acc90a1.jpg?itok=WTVpcDZd").unidadMedida("paquete").peso(0.2).categoriaId(categorias.get(4)).build(),
+                    Producto.builder().nombre("Galletas de Avena").descripcion("Galletas artesanales con avena y pasas").stock(30).precio(BigDecimal.valueOf(6.00)).activo(true).codigo("SNA005").imagenUrl("https://www.recetasnestle.cl/sites/default/files/styles/recipe_detail_desktop_new/public/srh_recipes/df2b52515a0d96b7e21123fe0acc90a1.jpg").unidadMedida("paquete").peso(0.2).categoriaId(categorias.get(4)).build(),
                     Producto.builder().nombre("Panini de Pollo").descripcion("Panini con pollo, queso y albahaca").stock(25).precio(BigDecimal.valueOf(14.90)).activo(true).codigo("SAN006").imagenUrl("https://easyways.cl/storage/20220224063245panini-con-pollo-grillado-palya-y-queso.jpg").unidadMedida("unidad").peso(0.35).categoriaId(categorias.get(5)).build(),
                     Producto.builder().nombre("Jugo de Naranja").descripcion("Jugo natural recién exprimido").stock(20).precio(BigDecimal.valueOf(9.50)).activo(true).codigo("JUG007").imagenUrl("https://5aldia.cl/wp-content/uploads/2018/04/jugo-de-naranja-destacado.jpg").unidadMedida("botella").peso(0.5).categoriaId(categorias.get(6)).build(),
-                    Producto.builder().nombre("Vaso Reutilizable").descripcion("Vaso ecológico reutilizable 500ml").stock(15).precio(BigDecimal.valueOf(20.00)).activo(true).codigo("ACC008").imagenUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvV7R90p8vsTasFc3-dn9KgJm_UpDa8A-vIA&s").unidadMedida("unidad").peso(0.25).categoriaId(categorias.get(7)).build(),
+                    Producto.builder().nombre("Vaso Reutilizable").descripcion("Vaso ecológico reutilizable 500ml").stock(15).precio(BigDecimal.valueOf(20.00)).activo(true).codigo("ACC008").imagenUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvV7R90p8vsTasFc3-dn9KgJm_UpDa8A-vIA").unidadMedida("unidad").peso(0.25).categoriaId(categorias.get(7)).build(),
                     Producto.builder().nombre("Pack Promoción Desayuno").descripcion("Café + sándwich + galleta").stock(10).precio(BigDecimal.valueOf(18.00)).activo(true).codigo("PRO009").imagenUrl("https://www.starbucks.pe/Multimedia/productos/DESAYUNO_PARA_DOS_V4.png").unidadMedida("pack").peso(0.6).categoriaId(categorias.get(8)).build(),
                     Producto.builder().nombre("Pumpkin Spice Latte").descripcion("Café con leche sabor calabaza - Edición limitada").stock(12).precio(BigDecimal.valueOf(15.00)).activo(true).codigo("LTD010").imagenUrl("https://coffeecopycat.com/wp-content/uploads/2023/10/IcedPumpkinSpiceLatte-1200-x-1200.jpg").unidadMedida("vaso").peso(0.3).categoriaId(categorias.get(9)).build()
             );
             productoRepository.saveAll(productos);
-
-// 🔹 ROLES
-            rolRepository.save(Rol.builder().nombre("ADMIN").descripcion("Administrador del sistema").build());
-            rolRepository.save(Rol.builder().nombre("USER").descripcion("Cliente de la tienda").build());
-
-// 🔹 Buscar roles desde la BD (asegurando persistencia)
-            Rol rolAdmin = rolRepository.findByNombre("ADMIN").orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
-            System.out.println(rolAdmin);
-            Rol rolUser = rolRepository.findByNombre("USER").orElseThrow(() -> new RuntimeException("Rol USER no encontrado"));
-
-// 🔹 USUARIOS
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Admin").apellidos("Uno").email("admin1@starbuks.com")
-                    .telefono("900000001").username("admin1").password("admin123")
-                    .activo(true).rol(rolAdmin).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Admin").apellidos("Dos").email("admin2@starbuks.com")
-                    .telefono("900000002").username("admin2").password("admin123")
-                    .activo(true).rol(rolAdmin).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Uno").email("user1@starbuks.com")
-                    .telefono("900000003").username("user1").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Dos").email("user2@starbuks.com")
-                    .telefono("900000004").username("user2").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Tres").email("user3@starbuks.com")
-                    .telefono("900000005").username("user3").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Cuatro").email("user4@starbuks.com")
-                    .telefono("900000006").username("user4").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Cinco").email("user5@starbuks.com")
-                    .telefono("900000007").username("user5").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            usuarioRepository.save(Usuario.builder()
-                    .nombres("Usuario").apellidos("Seis").email("user6@starbuks.com")
-                    .telefono("900000008").username("user6").password("user123")
-                    .activo(true).rol(rolUser).build());
-
-            System.out.println("🟢 Usuarios insertados correctamente.");
+            System.out.println("🟢 Productos insertados.");
         }
     }
 }

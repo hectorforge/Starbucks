@@ -10,6 +10,7 @@ import com.starbuks.app.entitys.bean.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
 	public List<Categoria> findByActivoTrue();
+    Categoria findByNombre(String nombre);
     boolean existsByNombreIgnoreCase(String nombre);
     
 }
