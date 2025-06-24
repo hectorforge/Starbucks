@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center" href="#">
@@ -34,13 +33,13 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/categorias}">
-            <i class="bi bi-tags-fill"></i> Categorías
+          <a class="nav-link" th:href="@{/ventas}">
+            <i class="bi bi-cart-check-fill"></i> Ventas
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/templates/usuario}">
+          <a class="nav-link" th:href="@{/usuarios}">
             <i class="bi bi-people-fill"></i> Usuarios
           </a>
         </li>
@@ -69,6 +68,7 @@
     </div>
   </div>
 </nav>
+
 
 <div class="container mt-4">
 <h1 class="mb-4 text-center" th:text="${productoId == null} ? 'Nuevo Producto' : 'Editar Producto'"></h1>
