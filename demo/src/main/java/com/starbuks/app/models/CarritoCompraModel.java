@@ -1,6 +1,7 @@
 package com.starbuks.app.models;
 
 import com.starbuks.app.entitys.bean.CarritoCompra;
+import com.starbuks.app.entitys.bean.Compra;
 import com.starbuks.app.entitys.bean.ItemCarrito;
 import com.starbuks.app.entitys.bean.Producto;
 import com.starbuks.app.entitys.bean.Usuario;
@@ -8,12 +9,14 @@ import com.starbuks.app.persistence.CarritoCompraRepository;
 import com.starbuks.app.persistence.ItemCarritoRepository;
 import com.starbuks.app.persistence.ProductoRepository;
 import com.starbuks.app.persistence.UsuarioRepository;
+import com.starbuks.app.persistence.CompraRepository;
 import com.starbuks.app.usecase.CarritoCompraUseCase;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -24,6 +27,7 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
     private final ItemCarritoRepository itemRepo;
     private final ProductoRepository productoRepo;
     private final UsuarioRepository usuarioRepo;
+    private final CompraRepository compraRepository;
 
     @Override
     public void agregarAlCarrito(Long usuarioId, Long productoId, int cantidad) {
@@ -71,7 +75,9 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
     @Transactional
     public void pagarCarrito(Long usuarioId) {
         CarritoCompra carrito = obtenerCarrito(usuarioId);
-        if (carrito == null) throw new RuntimeException("No hay carrito pendiente de pago");
+        if (carrito == null || carrito.getItems().isEmpty()) {
+            throw new RuntimeException("No hay carrito pendiente de pago");
+        }
 
         for (ItemCarrito item : carrito.getItems()) {
             Producto producto = item.getProducto();
@@ -81,9 +87,19 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
             }
             producto.setStock(nuevoStock);
             productoRepo.save(producto);
+
+            // Guardar en historial de compras
+            Compra compra = new Compra();
+            compra.setUsuario(carrito.getUsuario());
+            compra.setProducto(producto);
+            compra.setCantidad(item.getCantidad());
+            compra.setPrecioUnitario(producto.getPrecio());
+            compra.setFecha(LocalDateTime.now());
+            compraRepository.save(compra); // inyecta y usa CompraRepository
         }
 
         carrito.setPagado(true);
+        carrito.getItems().clear(); // Limpia el carrito
         carritoRepo.save(carrito);
     } 
     @Override

@@ -10,16 +10,23 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html"><i class="bi bi-cup-hot"></i> Starbucks </a>
+        <a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link active" href="productos.html">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" href="miscompras.html">Mis Compras</a></li>
-                <li class="nav-item"><a class="nav-link" href="carrito.html">Carrito</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/inicio}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/cliente/productos}">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
+                <li class="nav-item">
+				  <a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
+				    <i class="bi bi-cart-fill"></i> Carrito
+				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+				      <span th:text="${carritoCantidad}">0</span>
+				    </span>
+				  </a>
+				</li>
             </ul>
         </div>
     </div>
@@ -28,7 +35,7 @@
 <div class="container py-5">
     <h2 class="mb-4 text-center">Catálogo de Productos</h2>
 
-    <form method="get" th:action="@{/productos}" class="row g-3 mb-4">
+    <form method="get" th:action="@{/cliente/productos}" class="row g-3 mb-4">
         <div class="col-md-4">
             <label for="categoria" class="form-label">Categoría</label>
             <select id="categoria" name="categoria" class="form-select">
@@ -57,9 +64,17 @@
                     <h5 class="card-title" th:text="${producto.nombre}"></h5>
                     <p class="card-text" th:text="${producto.descripcion}"></p>
                     <p class="text-success fw-bold" th:text="'S/ ' + ${producto.precio}"></p>
-                    <a th:href="@{'/carrito/agregar/' + ${producto.id}}" class="btn btn-outline-success w-100">
-                        <i class="bi bi-cart-plus"></i> Agregar al carrito
-                    </a>
+                    <form th:action="@{/carrito/agregar}" method="post" class="mt-3">
+						    <input type="hidden" name="productoId" th:value="${producto.id}" />
+						    <input type="hidden" name="usuarioId" th:value="${usuarioId}" />
+						    <div class="input-group">
+						        <input type="number" name="cantidad" class="form-control" value="1" min="1" max="99" />
+						        <button type="submit" class="btn btn-outline-success">
+						            <i class="bi bi-cart-plus"></i> Agregar
+						        </button>
+						    </div>
+						</form>
+                        
                 </div>
             </div>
         </div>

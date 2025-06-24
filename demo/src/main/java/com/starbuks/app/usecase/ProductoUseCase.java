@@ -29,5 +29,7 @@ public interface ProductoUseCase {
     
     public List<Producto> listarActivos();
     
+    public List<Producto> findByCategoriaActiva(Long categoriaId);
+    
     
 }

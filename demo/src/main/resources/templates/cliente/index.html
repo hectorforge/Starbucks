@@ -77,18 +77,25 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark navbar-blur sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html"><i class="bi bi-cup-hot"></i> Starbucks </a>
+        <a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" href="miscompras.html">Mis Compras</a></li>
-                <li class="nav-item"><a class="nav-link" href="carrito.html">Carrito</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/cliente/inicio}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/productos}">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
+                <li class="nav-item">
+				  <a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
+				    <i class="bi bi-cart-fill"></i> Carrito
+				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+				      <span th:text="${carritoCantidad}">0</span>
+				    </span>
+				  </a>
+				</li>
             </ul>
         </div>
     </div>

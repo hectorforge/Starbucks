@@ -94,4 +94,9 @@ public class ProductoModel implements ProductoUseCase {
 		public List<Producto> listarActivos() {
 	        return productoRepository.findByActivoTrue();
 	    }
+		
+		@Override
+	    public List<Producto> findByCategoriaActiva(Long categoriaId) {
+	        return productoRepository.findByCategoriaId_IdAndActivoTrue(categoriaId);
+	    }
 }

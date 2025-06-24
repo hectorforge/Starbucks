@@ -52,10 +52,23 @@ public class DataInitRolesUsuarios {
                     .rol(rolUser)
                     .build();
 
+            Usuario usuarioDemo = Usuario.builder()
+                    .id(1L) // <- ID fija para pruebas
+                    .nombres("Cliente Demo")
+                    .apellidos("De Prueba")
+                    .email("demo@correo.com")
+                    .telefono("999999999")
+                    .username("demo")
+                    .password("demo")
+                    .activo(true)
+                    .rol(rolUser)
+                    .build();
+
             usuarioRepository.save(usuario1);
             usuarioRepository.save(usuario2);
+            usuarioRepository.save(usuarioDemo);
 
-            System.out.println("🟢 Roles y Usuarios insertados");
+            System.out.println("🟢 Roles y Usuarios insertados (incluyendo usuario de prueba con ID 1)");
         }
     }
 }

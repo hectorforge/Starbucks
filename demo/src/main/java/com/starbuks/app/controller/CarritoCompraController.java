@@ -29,13 +29,14 @@ public class CarritoCompraController {
                                   @RequestParam Long productoId,
                                   @RequestParam int cantidad) {
         carritoUseCase.agregarAlCarrito(usuarioId, productoId, cantidad);
-        return "redirect:/cliente/tienda";
+        return "redirect:/cliente/productos";
     }
 
     @GetMapping("/{usuarioId}")
     public String verCarrito(@PathVariable Long usuarioId, Model model) {
         CarritoCompra carrito = carritoUseCase.obtenerCarrito(usuarioId);
         CarritoCompraDTO dto = new CarritoCompraDTO();
+        int carritoCantidad = 0;
 
         if (carrito != null) {
             dto.setUsuarioId(carrito.getUsuario().getId());
@@ -56,10 +57,20 @@ public class CarritoCompraController {
                 .map(i -> i.getPrecioUnitario().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
             dto.setTotal(total);
+
+            
+            carritoCantidad = items.stream()
+                .mapToInt(ItemCarritoDTO::getCantidad)
+                .sum();
         }
+
         model.addAttribute("carrito", dto);
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("carritoCantidad", carritoCantidad);
+
         return "cliente/carrito";
     }
+
 
     @PostMapping("/pagar")
     public String pagar(@RequestParam Long usuarioId) {

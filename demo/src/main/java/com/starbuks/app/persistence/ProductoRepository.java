@@ -26,5 +26,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>  {
 	    public void deleteById(Long id);
 	    
 	    public long countByCategoriaId_Id(Long categoriaId);
+	    
+	    List<Producto> findByCategoriaId_IdAndActivoTrue(Long categoriaId);
 	
 }
