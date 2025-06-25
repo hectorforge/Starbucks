@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registrar Venta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Registrar Venta</h2>
+    <form id="formVenta" th:action="@{/ventas/guardar}" th:object="${venta}" method="post" class="row g-3">
+        
+        <!-- Cliente -->
+        <div class="col-md-6">
+            <label class="form-label">Cliente</label>
+            <select class="form-select" th:field="*{usuarioId}" required>
+                <option value="">Seleccione</option>
+                <option th:each="user : ${usuarios}" th:value="${user.id}" th:text="${user.nombres + ' ' + user.apellidos}"></option>
+            </select>
+        </div>
+
+        <!-- Modalidad -->
+        <div class="col-md-6">
+		    <label class="form-label">Modalidad</label>
+		    <input type="text" class="form-control" name="modalidad" value="Presencial" readonly />
+		</div>
+
+        <!-- Producto -->
+        <div class="col-md-4">
+            <label class="form-label">Producto</label>
+            <select class="form-select" th:field="*{productoId}" onchange="actualizarPrecio(this)" required>
+                <option value="">Seleccione</option>
+                <option th:each="prod : ${productos}" th:value="${prod.id}" th:text="${prod.nombre}" th:attr="data-precio=${prod.precio}"></option>
+            </select>
+        </div>
+
+        <!-- Cantidad -->
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input type="number" class="form-control" th:field="*{cantidad}" min="1" required />
+        </div>
+
+        <!-- Precio Unitario -->
+        <div class="col-md-4">
+            <label class="form-label">Precio Unitario</label>
+            <input type="number" class="form-control" th:field="*{precioUnitario}" step="0.01" readonly required id="precioUnitario" />
+        </div>
+
+        <!-- Botones -->
+        <div class="col-12 text-center mt-4">
+            <button type="button" class="btn btn-success" id="btnPagar">Pagar</button>
+            <a th:href="@{/ventas}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+<div class="modal fade" id="resumenVentaModal" tabindex="-1" aria-labelledby="resumenVentaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resumenVentaLabel">Resumen de la Venta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Cliente:</strong> <span id="resumenCliente"></span></p>
+        <p><strong>Producto:</strong> <span id="resumenProducto"></span></p>
+        <p><strong>Cantidad:</strong> <span id="resumenCantidad"></span></p>
+        <p><strong>Precio Unitario:</strong> <span id="resumenPrecio"></span></p>
+        <p><strong>Total:</strong> <span id="resumenTotal"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" id="confirmarPago">Confirmar Pago</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    function actualizarPrecio(select) {
+        const selected = select.options[select.selectedIndex];
+        const precio = selected.getAttribute("data-precio");
+        document.getElementById("precioUnitario").value = precio || "";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const productoSelect = document.querySelector('[name="productoId"]');
+        if (productoSelect) productoSelect.dispatchEvent(new Event('change'));
+    });
+</script>
+<script>
+    document.getElementById("btnPagar").addEventListener("click", function () {
+        const cliente = document.querySelector('[name="usuarioId"] option:checked').textContent;
+        const producto = document.querySelector('[name="productoId"] option:checked').textContent;
+        const cantidad = document.querySelector('[name="cantidad"]').value;
+        const precio = document.querySelector('[name="precioUnitario"]').value;
+        const total = (parseFloat(cantidad) * parseFloat(precio)).toFixed(2);
+
+        document.getElementById("resumenCliente").textContent = cliente;
+        document.getElementById("resumenProducto").textContent = producto;
+        document.getElementById("resumenCantidad").textContent = cantidad;
+        document.getElementById("resumenPrecio").textContent = `S/ ${precio}`;
+        document.getElementById("resumenTotal").textContent = `S/ ${total}`;
+
+        const modal = new bootstrap.Modal(document.getElementById('resumenVentaModal'));
+        modal.show();
+    });
+
+    document.getElementById("confirmarPago").addEventListener("click", function () {
+        document.getElementById("formVenta").submit();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+
+</html>

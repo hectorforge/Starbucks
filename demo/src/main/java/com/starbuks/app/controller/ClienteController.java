@@ -1,11 +1,11 @@
 package com.starbuks.app.controller;
 
-import com.starbuks.app.entitys.bean.CarritoCompra;
+//import com.starbuks.app.entitys.bean.CarritoCompra;
 import com.starbuks.app.entitys.bean.ItemCarrito;
 import com.starbuks.app.entitys.bean.Producto;
 import com.starbuks.app.usecase.CarritoCompraUseCase;
 import com.starbuks.app.usecase.CategoriaUseCase;
-import com.starbuks.app.usecase.CompraUseCase;
+import com.starbuks.app.usecase.VentaUseCase;
 import com.starbuks.app.usecase.ProductoUseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class ClienteController {
     private final ProductoUseCase productoUseCase;
     private final CarritoCompraUseCase carritoUseCase;
     private final CategoriaUseCase categoriaUseCase; 
-    private final CompraUseCase compraUseCase;
+    private final VentaUseCase ventaUseCase;
 
     @GetMapping("/productos")
     public String verProductos(
@@ -84,8 +84,8 @@ public class ClienteController {
     @GetMapping("/miscompras")
     public String verMisCompras(Model model) {
         Long usuarioId = 1L; // Reemplazar por el usuario autenticado en un caso real
-        var compras = compraUseCase.obtenerComprasPorUsuario(usuarioId);
-        model.addAttribute("compras", compras);
+        var venta = ventaUseCase.obtenerVentaPorUsuario(usuarioId);
+        model.addAttribute("compras", venta);
         model.addAttribute("usuarioId", usuarioId);
 
         var carrito = carritoUseCase.obtenerCarrito(usuarioId);
