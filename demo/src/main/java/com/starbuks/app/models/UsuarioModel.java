@@ -28,17 +28,6 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public List<Usuario> findByEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
-
-    @Override
-    public List<Usuario> findByNombreStartingWith(String nombre) {
-    //    return usuarioRepository.findByNombresStartingWithIgnoreCase(nombre);
-        return null;
-    }
-
-    @Override
     public Usuario registrarUsuario(Usuario usuario) {
         if (usuario.getEmail() == null || usuario.getEmail().isEmpty()) {
             throw new IllegalArgumentException("El email es obligatorio");

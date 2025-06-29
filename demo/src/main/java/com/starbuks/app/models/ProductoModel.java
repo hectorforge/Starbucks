@@ -29,23 +29,8 @@ public class ProductoModel implements ProductoUseCase {
 	    }
 
 	    @Override
-	    public Optional<Producto> findByIdAndActivoTrue(Long id) {
-	        return productoRepository.findByIdAndActivoTrue(id);
-	    }
-
-	    @Override
-	    public List<Producto> findByNombreContainingIgnoreCase(String nombre) {
-	        return productoRepository.findByNombreContainingIgnoreCase(nombre);
-	    }
-
-	    @Override
 	    public List<Producto> obtenerPorPrecioEntre(BigDecimal min, BigDecimal max) {
 	        return productoRepository.findByPrecioBetween(min, max);
-	    }
-
-	    @Override
-	    public List<Producto> findByStockGreaterThanEqual(int cantidad) {
-	        return productoRepository.findByStockGreaterThanEqual(cantidad);
 	    }
 
 	    @Override
