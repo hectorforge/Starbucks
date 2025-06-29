@@ -1,125 +1,165 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Productos - Starbucks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
-</style>
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>Productos - Starbucks</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<style>
+		.card-img-top {
+			height: 200px;
+			object-fit: cover;
+		}
+	</style>
+	<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/inicio}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link active" th:href="@{/cliente/productos}">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
-                <li class="nav-item">
-				  <a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
-				    <i class="bi bi-cart-fill"></i> Carrito
-				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-				      <span th:text="${carritoCantidad}">0</span>
-				    </span>
-				  </a>
-				</li>
-            </ul>
-        </div>
-    </div>
-</nav>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+		<div class="container-fluid">
+			<a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMain">
+				<ul class="navbar-nav me-auto">
+					<li class="nav-item"><a class="nav-link" th:href="@{/cliente/inicio}">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link active" th:href="@{/cliente/productos}">Productos</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
+					<li class="nav-item">
+						<a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
+							<i class="bi bi-cart-fill"></i> Carrito
+							<span
+								class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+								<span th:text="${carritoCantidad}">0</span>
+							</span>
+						</a>
+					</li>
+				</ul>
 
-<div class="container py-5">
-    <h2 class="mb-4 text-center">Catálogo de Productos</h2>
+				<!-- Sección de la sesión -->
+				<ul class="navbar-nav mb-2 mb-lg-0">
+					<!-- Si el usuario está autenticado -->
+					<li class="nav-item dropdown" th:if="${usuario != null}">
+						<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+							<i class="bi bi-person-circle"></i> <span th:text="${usuario.username}"></span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end">
+							<li>
+								<a class="dropdown-item" th:href="@{/perfil}">
+									<i class="bi bi-person"></i> Perfil
+								</a>
+							</li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li>
+								<form th:action="@{/logout}" method="post" class="d-flex justify-content-center px-3">
+									<button type="submit" class="btn btn-outline-danger w-100">Cerrar sesión</button>
+								</form>
+							</li>
+						</ul>
+					</li>
 
-    <form method="get" th:action="@{/cliente/productos}" class="row g-3 mb-4">
-        <div class="col-md-4">
-            <label for="categoria" class="form-label">Categoría</label>
-            <select id="categoria" name="categoria" class="form-select">
-                <option value="">Todas</option>
-                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="min" class="form-label">Precio mínimo</label>
-            <input type="number" id="min" name="min" class="form-control" th:value="${min}">
-        </div>
-        <div class="col-md-3">
-            <label for="max" class="form-label">Precio máximo</label>
-            <input type="number" id="max" name="max" class="form-control" th:value="${max}">
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-success w-100"><i class="bi bi-funnel-fill"></i> Filtrar</button>
-        </div>
-    </form>
+					<!-- Si el usuario NO está autenticado -->
+					<li class="nav-item" th:if="${usuario == null}">
+						<a class="nav-link" href="http://localhost:8080/login">
+							<i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+						</a>
+					</li>
+				</ul>
 
-    <div class="row g-4">
-        <div class="col-md-4" th:each="producto : ${productos}">
-            <div class="card h-100">
-                <img th:src="@{${producto.imagenUrl}}" class="card-img-top" alt="Producto">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${producto.nombre}"></h5>
-                    <p class="card-text" th:text="${producto.descripcion}"></p>
-                    <p class="text-success fw-bold" th:text="'S/ ' + ${producto.precio}"></p>
-                    <form th:action="@{/carrito/agregar}" method="post" class="mt-3 form-agregar">
-						    <input type="hidden" name="productoId" th:value="${producto.id}" />
-						    <input type="hidden" name="usuarioId" th:value="${usuarioId}" />
-						    <div class="input-group">
-						        <input type="number" name="cantidad" class="form-control" value="1" min="1" max="99" />
-						        <button type="submit" class="btn btn-outline-success">
-						            <i class="bi bi-cart-plus"></i> Agregar
-						        </button>
-						    </div>
+			</div>
+		</div>
+
+	</nav>
+
+	<div class="container py-5">
+		<h2 class="mb-4 text-center">Catálogo de Productos</h2>
+
+		<form method="get" th:action="@{/cliente/productos}" class="row g-3 mb-4">
+			<div class="col-md-4">
+				<label for="categoria" class="form-label">Categoría</label>
+				<select id="categoria" name="categoria" class="form-select">
+					<option value="">Todas</option>
+					<option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<label for="min" class="form-label">Precio mínimo</label>
+				<input type="number" id="min" name="min" class="form-control" th:value="${min}">
+			</div>
+			<div class="col-md-3">
+				<label for="max" class="form-label">Precio máximo</label>
+				<input type="number" id="max" name="max" class="form-control" th:value="${max}">
+			</div>
+			<div class="col-md-2 d-flex align-items-end">
+				<button type="submit" class="btn btn-success w-100"><i class="bi bi-funnel-fill"></i> Filtrar</button>
+			</div>
+		</form>
+
+		<div class="row g-4">
+			<div class="col-md-4" th:each="producto : ${productos}">
+				<div class="card h-100">
+					<img th:src="@{${producto.imagenUrl}}" class="card-img-top" alt="Producto">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${producto.nombre}"></h5>
+						<p class="card-text" th:text="${producto.descripcion}"></p>
+						<p class="text-success fw-bold" th:text="'S/ ' + ${producto.precio}"></p>
+						<form th:action="@{/carrito/agregar}" method="post" class="mt-3 form-agregar">
+							<input type="hidden" name="productoId" th:value="${producto.id}" />
+							<input type="hidden" name="usuarioId" th:value="${usuarioId}" />
+							<div class="input-group">
+								<input type="number" name="cantidad" class="form-control" value="1" min="1" max="99" />
+								<button type="submit" class="btn btn-outline-success">
+									<i class="bi bi-cart-plus"></i> Agregar
+								</button>
+							</div>
 						</form>
-                        
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<footer class="footer text-center mt-5 bg-dark text-white py-3">
-    <div class="container">
-        <p class="mb-0">&copy; 2025 Starbucks. Todos los derechos reservados.</p>
-    </div>
-</footer>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const forms = document.querySelectorAll(".form-agregar");
-  forms.forEach(form => {
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-      const formData = new FormData(form);
+	<footer class="footer text-center mt-5 bg-dark text-white py-3">
+		<div class="container">
+			<p class="mb-0">&copy; 2025 Starbucks. Todos los derechos reservados.</p>
+		</div>
+	</footer>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const forms = document.querySelectorAll(".form-agregar");
+			forms.forEach(form => {
+				form.addEventListener("submit", async e => {
+					e.preventDefault();
 
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: formData
-      });
+					const formData = new FormData(form);
 
-      if (response.ok) {
-        
-        const contador = document.querySelector(".bi-cart-fill + span span");
-        if (contador) {
-          const actual = parseInt(contador.textContent || "0");
-          const nueva = parseInt(formData.get("cantidad") || "0");
-          contador.textContent = actual + nueva;
-        }
-      } else {
-        alert("Error al agregar al carrito");
-      }
-    });
-  });
-});
-</script>
+					const response = await fetch(form.action, {
+						method: "POST",
+						body: formData
+					});
+
+					if (response.ok) {
+
+						const contador = document.querySelector(".bi-cart-fill + span span");
+						if (contador) {
+							const actual = parseInt(contador.textContent || "0");
+							const nueva = parseInt(formData.get("cantidad") || "0");
+							contador.textContent = actual + nueva;
+						}
+					} else {
+						alert("Error al agregar al carrito");
+					}
+				});
+			});
+		});
+	</script>
 </body>
+
 </html>

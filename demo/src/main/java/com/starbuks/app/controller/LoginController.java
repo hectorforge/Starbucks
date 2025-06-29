@@ -24,13 +24,6 @@ public class LoginController {
         return "login";
     }
 
-//    @GetMapping("/dashboard")
-//    public String dashboard(Authentication auth, Model model) {
-//        model.addAttribute("usuario", auth.getName());
-//
-//        return "dash/dashboard"; // dashboard.html
-//    }
-
     @GetMapping("/dashboard")
     public String dashboard(Authentication auth, Model model) {
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();

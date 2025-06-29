@@ -37,7 +37,10 @@
 <nav class="navbar navbar-dark bg-dark mb-4">
     <div class="container-fluid d-flex justify-content-between">
         <a class="navbar-brand d-flex align-items-center" href="/dashboard">
-            <i class="bi bi-cup-hot me-2"></i> Starbucks Admin
+			<a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
+			    <i class="bi bi-cup-hot me-2"></i>
+			    <span th:text="${usuario.rol.nombre == 'USER' ? 'Starbucks' : 'Starbucks Admin'}">Starbucks</span>
+			</a>
         </a>
         <form th:action="@{/logout}" method="post">
             <button class="btn btn-outline-light btn-sm">Cerrar sesión</button>
@@ -93,12 +96,31 @@
             </div>
         </div>
 
+		<!--
+		
         <div class="mt-4 text-center">
             <a href="/usuarios" class="btn btn-outline-primary me-2"><i class="bi bi-pencil"></i> Editar perfil</a>
             <a href="/dashboard" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left-circle"></i> Regresar
             </a>
         </div>
+		-->
+		
+		<!-- Botones solo visibles si el rol es diferente de USER -->
+		<div class="mt-4 text-center" th:if="${usuario.rol.nombre != 'USER'}">
+		    <a href="/usuarios" class="btn btn-outline-primary me-2"><i class="bi bi-pencil"></i> Editar perfil</a>
+		    <a href="/dashboard" class="btn btn-outline-primary">
+		        <i class="bi bi-arrow-left-circle"></i> Regresar
+		    </a>
+		</div>
+
+		<!-- Botón solo para usuarios con rol USER -->
+		<div class="mt-4 text-center" th:if="${usuario.rol.nombre == 'USER'}">
+		    <a href="/cliente/inicio" class="btn btn-outline-primary">
+		        <i class="bi bi-arrow-left-circle"></i> Regresar
+		    </a>
+		</div>
+
     </div>
 </div>
 

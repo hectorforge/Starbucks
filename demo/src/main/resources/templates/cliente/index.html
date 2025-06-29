@@ -97,6 +97,37 @@
 				  </a>
 				</li>
             </ul>
+			<!-- Sección de la sesión -->
+			<ul class="navbar-nav mb-2 mb-lg-0">
+				<!-- Si el usuario está autenticado -->
+				<li class="nav-item dropdown" th:if="${usuario != null}">
+					<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+						<i class="bi bi-person-circle"></i> <span th:text="${usuario.username}"></span>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li>
+							<a class="dropdown-item" th:href="@{/perfil}">
+								<i class="bi bi-person"></i> Perfil
+							</a>
+						</li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li>
+							<form th:action="@{/logout}" method="post" class="d-flex justify-content-center px-3">
+								<button type="submit" class="btn btn-outline-danger w-100">Cerrar sesión</button>
+							</form>
+						</li>
+					</ul>
+				</li>
+
+				<!-- Si el usuario NO está autenticado -->
+				<li class="nav-item" th:if="${usuario == null}">
+					<a class="nav-link" href="http://localhost:8080/login">
+						<i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+					</a>
+				</li>
+			</ul>
         </div>
     </div>
 </nav>
