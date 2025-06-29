@@ -1,9 +1,6 @@
 package com.starbuks.app.entitys.bean;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -13,5 +10,10 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "venta_id")
     private Venta venta;
+
+    private String direccionEntrega;
+    private String estado; // EJ: PENDIENTE, EN CAMINO, ENTREGADO
 }
