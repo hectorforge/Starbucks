@@ -34,7 +34,7 @@ public class VentaController {
     // LISTAR TODOS LAS VENTAS
 	 @GetMapping
 	    public String listarVentas(Model model) {
-	        model.addAttribute("ventas", ventaUseCase.obtenerTodas());
+	        model.addAttribute("ventas", ventaUseCase.listarVentas());
 	        return "ventas/listar";
 	    }
 	 
@@ -45,7 +45,7 @@ public class VentaController {
 	     VentaModelDTO ventaDTO = new VentaModelDTO(); 
 
 	     model.addAttribute("venta", ventaDTO);
-	     model.addAttribute("productos", productoUseCase.findAll());
+	     model.addAttribute("productos", productoUseCase.listarProductos());
 	     model.addAttribute("usuarios", usuarioUseCase.listarUsuarios());
 
 	     return "ventas/registrar"; 
@@ -75,7 +75,7 @@ public class VentaController {
 	             ventas = ventaUseCase.buscarPorFecha(fecha);
 	             break;
 	         default:
-	             ventas = ventaUseCase.obtenerTodas();
+	             ventas = ventaUseCase.listarVentas();
 	     }
 
 	     model.addAttribute("ventas", ventas);

@@ -6,11 +6,11 @@ import java.util.List;
 public interface CategoriaUseCase {
 
 	 // CRUD
-    List<Categoria> listar();
+    List<Categoria> listarCategorias();
     Categoria obtenerPorId(Long id);
-    Categoria registrar(Categoria categoria);
-    Categoria actualizar(Categoria categoria);
-    void eliminar(Long id);
+    Categoria registrarCategoria(Categoria categoria);
+    Categoria actualizarCategoria(Categoria categoria);
+    void eliminarPorId(Long id);
 
     // ADDS
     List<Categoria> listarActivas();

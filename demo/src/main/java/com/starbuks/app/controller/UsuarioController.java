@@ -34,7 +34,7 @@ public class UsuarioController {
 	public String mostrarFormularioNuevo(Model model) {
 		model.addAttribute("usuario", new UsuarioDTO());
 		model.addAttribute("usuarioId", null);
-		model.addAttribute("roles", rolUseCase.ListarRoles());
+		model.addAttribute("roles", rolUseCase.listarRoles());
 		return "usuario/formulario";
 	}
 
@@ -42,14 +42,14 @@ public class UsuarioController {
 	@PostMapping("/guardar")
 	public String guardarUsuario(@ModelAttribute UsuarioDTO dto) {
 		Usuario usuario = convertirDtoAEntidad(dto);
-		usuarioUseCase.save(usuario);
+		usuarioUseCase.registrarUsuario(usuario);
 		return "redirect:/usuarios";
 	}
 
 	// FORMULARIO PARA EDITAR USUARIO
 	@GetMapping("/editar/{id}")
 	public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
-		Usuario usuario = usuarioUseCase.findById(id).orElseThrow();
+		Usuario usuario = usuarioUseCase.buscarPorId(id).orElseThrow();
 
 		UsuarioDTO dto = new UsuarioDTO();
 		dto.setNombres(usuario.getNombres());
@@ -66,7 +66,7 @@ public class UsuarioController {
 
 		model.addAttribute("usuario", dto);
 		model.addAttribute("usuarioId", id);
-		model.addAttribute("roles", rolUseCase.ListarRoles());
+		model.addAttribute("roles", rolUseCase.listarRoles());
 		return "usuario/formulario";
 	}
 
@@ -74,14 +74,14 @@ public class UsuarioController {
 	@PostMapping("/actualizar/{id}")
 	public String actualizarUsuario(@PathVariable Long id, @ModelAttribute UsuarioDTO dto) {
 		Usuario actualizado = convertirDtoAEntidad(dto, id);
-		usuarioUseCase.update(id, actualizado);
+		usuarioUseCase.actualizarUsuario(id, actualizado);
 		return "redirect:/usuarios";
 	}
 
 	// ELIMINAR USUARIO
 	@GetMapping("/eliminar/{id}")
 	public String eliminarUsuario(@PathVariable Long id) {
-		usuarioUseCase.deleteById(id);
+		usuarioUseCase.eliminarPorId(id);
 		return "redirect:/usuarios";
 	}
 
@@ -104,7 +104,7 @@ public class UsuarioController {
 		u.setActivo(dto.getActivo());
 
 		if (dto.getRolId() != null) {
-			Rol rol = rolUseCase.findById(dto.getRolId());
+			Rol rol = rolUseCase.obtenerPorId(dto.getRolId());
 			u.setRol(rol);
 		}
 

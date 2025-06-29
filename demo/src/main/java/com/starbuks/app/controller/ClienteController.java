@@ -43,11 +43,11 @@ public class ClienteController {
 
         List<Producto> productos;
         if (categoria != null) {
-            productos = productoUseCase.findByCategoriaActiva(categoria);
+            productos = productoUseCase.obtenerPorCategoriaActiva(categoria);
         } else if (min != null && max != null) {
-            productos = productoUseCase.findByPrecioBetween(min, max);
+            productos = productoUseCase.obtenerPorPrecioEntre(min, max);
         } else {
-            productos = productoUseCase.findByActivoTrue();
+            productos = productoUseCase.obtenerPorActivoTrue();
         }
         model.addAttribute("productos", productos);
 

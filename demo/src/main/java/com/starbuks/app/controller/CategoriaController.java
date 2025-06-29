@@ -17,7 +17,7 @@ public class CategoriaController {
 	    // CRUD
 	    @GetMapping
 	    public List<Categoria> listar() {
-	        return categoriaServicio.listar();
+	        return categoriaServicio.listarCategorias();
 	    }
 
 	    @GetMapping("/{id}")
@@ -27,17 +27,17 @@ public class CategoriaController {
 
 	    @PostMapping
 	    public Categoria registrar(@RequestBody Categoria categoria) {
-	        return categoriaServicio.registrar(categoria);
+	        return categoriaServicio.registrarCategoria(categoria);
 	    }
 
 	    @PutMapping
 	    public Categoria actualizar(@RequestBody Categoria categoria) {
-	        return categoriaServicio.actualizar(categoria);
+	        return categoriaServicio.actualizarCategoria(categoria);
 	    }
 
 	    @DeleteMapping("/{id}")
 	    public void eliminar(@PathVariable Long id) {
-	        categoriaServicio.eliminar(id);
+	        categoriaServicio.eliminarPorId(id);
 	    }
 
 	    // ADDS

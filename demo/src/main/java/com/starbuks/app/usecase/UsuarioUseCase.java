@@ -8,10 +8,8 @@ import java.util.Optional;
 public interface UsuarioUseCase {
 
     List<Usuario> listarUsuarios();
-    Optional<Usuario> findById(Long id);
-    List<Usuario> findByEmail(String email);
-    List<Usuario> findByNombreStartingWith(String nombre);
-    Usuario save(Usuario usuario);
-    Usuario update(Long id, Usuario usuario);
-    void deleteById(Long id);
+    Optional<Usuario> buscarPorId(Long id);
+    Usuario registrarUsuario(Usuario usuario);
+    Usuario actualizarUsuario(Long id, Usuario usuario);
+    void eliminarPorId(Long id);
 }

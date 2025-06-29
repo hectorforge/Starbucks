@@ -24,7 +24,7 @@ public class ProductoController {
 	// LISTAR TODOS LOS PRODUCTOS
 	@GetMapping()
 	public String listarProductos(Model model) {
-		List<Producto> productos = productoUseCase.findAll();
+		List<Producto> productos = productoUseCase.listarProductos();
 		model.addAttribute("productos", productos);
 		return "producto/listar";
 	}
@@ -34,7 +34,7 @@ public class ProductoController {
 	public String mostrarFormularioNuevo(Model model) {
 		model.addAttribute("producto", new ProductoDTO());
 		model.addAttribute("productoId", null);
-		model.addAttribute("categorias", categoriaUseCase.listar());
+		model.addAttribute("categorias", categoriaUseCase.listarCategorias());
 		return "producto/formulario";
 	}
 
@@ -42,14 +42,14 @@ public class ProductoController {
 	@PostMapping("/guardar")
 	public String guardarProducto(@ModelAttribute ProductoDTO dto) {
 		Producto producto = convertirDtoAEntidad(dto);
-		productoUseCase.save(producto);
+		productoUseCase.registrarProducto(producto);
 		return "redirect:/productos";
 	}
 
 	// FORMULARIO PARA EDITAR
 	@GetMapping("/editar/{id}")
 	public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
-		Producto producto = productoUseCase.findById(id).orElseThrow();
+		Producto producto = productoUseCase.obtenerPorId(id).orElseThrow();
 
 		ProductoDTO dto = new ProductoDTO();
 		dto.setNombre(producto.getNombre());
@@ -67,7 +67,7 @@ public class ProductoController {
 
 		model.addAttribute("productoId", id);
 		model.addAttribute("producto", dto);
-		model.addAttribute("categorias", categoriaUseCase.listar());
+		model.addAttribute("categorias", categoriaUseCase.listarCategorias());
 		return "producto/formulario";
 	}
 
@@ -75,14 +75,14 @@ public class ProductoController {
 	@PostMapping("/actualizar/{id}")
 	public String actualizarProducto(@PathVariable Long id, @ModelAttribute ProductoDTO dto) {
 		Producto actualizado = convertirDtoAEntidad(dto, id);
-		productoUseCase.update(id, actualizado);
+		productoUseCase.actualizarProducto(id, actualizado);
 		return "redirect:/productos";
 	}
 
 	// ELIMINAR PRODUCTO
 	@GetMapping("/eliminar/{id}")
 	public String eliminarProducto(@PathVariable Long id) {
-		productoUseCase.deleteById(id);
+		productoUseCase.eliminarPorId(id);
 		return "redirect:/productos";
 	}
 

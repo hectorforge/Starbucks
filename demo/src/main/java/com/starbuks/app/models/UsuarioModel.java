@@ -23,7 +23,7 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public Optional<Usuario> findById(Long id) {
+    public Optional<Usuario> buscarPorId(Long id) {
         return usuarioRepository.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public Usuario save(Usuario usuario) {
+    public Usuario registrarUsuario(Usuario usuario) {
         if (usuario.getEmail() == null || usuario.getEmail().isEmpty()) {
             throw new IllegalArgumentException("El email es obligatorio");
         }
@@ -61,7 +61,7 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public Usuario update(Long id, Usuario usuario) {
+    public Usuario actualizarUsuario(Long id, Usuario usuario) {
         Usuario existente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
 
@@ -80,7 +80,7 @@ public class UsuarioModel implements UsuarioUseCase {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void eliminarPorId(Long id) {
         usuarioRepository.deleteById(id);
     }
 }

@@ -19,12 +19,12 @@ public class ProductoModel implements ProductoUseCase {
 	    private ProductoRepository productoRepository;
 
 	    @Override
-	    public List<Producto> findAll() {
+	    public List<Producto> listarProductos() {
 	        return productoRepository.findAll();
 	    }
 
 	    @Override
-	    public List<Producto> findByActivoTrue() {
+	    public List<Producto> obtenerPorActivoTrue() {
 	        return productoRepository.findByActivoTrue();
 	    }
 
@@ -39,7 +39,7 @@ public class ProductoModel implements ProductoUseCase {
 	    }
 
 	    @Override
-	    public List<Producto> findByPrecioBetween(BigDecimal min, BigDecimal max) {
+	    public List<Producto> obtenerPorPrecioEntre(BigDecimal min, BigDecimal max) {
 	        return productoRepository.findByPrecioBetween(min, max);
 	    }
 
@@ -49,16 +49,16 @@ public class ProductoModel implements ProductoUseCase {
 	    }
 
 	    @Override
-	    public Optional<Producto> findById(Long id) {
+	    public Optional<Producto> obtenerPorId(Long id) {
 	        return productoRepository.findById(id);
 	    }
 
-	    public void deleteById(Long id) {
+	    public void eliminarPorId(Long id) {
 	        productoRepository.deleteById(id);
 	    }
 	    
 	    @Override
-	    public Producto save(Producto producto) {
+	    public Producto registrarProducto(Producto producto) {
 	        if (producto.getNombre() == null || producto.getNombre().isEmpty()) {
 	            throw new IllegalArgumentException("El nombre del producto es obligatorio");
 	        }
@@ -72,7 +72,7 @@ public class ProductoModel implements ProductoUseCase {
 	    }
 
 		@Override
-		public Producto update(Long id, Producto producto) {
+		public Producto actualizarProducto(Long id, Producto producto) {
 			Producto productoExistente = productoRepository.findById(id)
 					.orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
 
@@ -96,7 +96,7 @@ public class ProductoModel implements ProductoUseCase {
 	    }
 		
 		@Override
-	    public List<Producto> findByCategoriaActiva(Long categoriaId) {
+	    public List<Producto> obtenerPorCategoriaActiva(Long categoriaId) {
 	        return productoRepository.findByCategoriaId_IdAndActivoTrue(categoriaId);
 	    }
 }

@@ -17,12 +17,12 @@ public class RolModel implements RolUseCase {
 	private RolRepository rolRepository;
 	
 	@Override
-	public List<Rol> ListarRoles() {
+	public List<Rol> listarRoles() {
 		return rolRepository.ListarRoles();
 	}
 
 	@Override
-	public Rol findById(Long id) {
+	public Rol obtenerPorId(Long id) {
 		return rolRepository.getById(id);
 	}
 }

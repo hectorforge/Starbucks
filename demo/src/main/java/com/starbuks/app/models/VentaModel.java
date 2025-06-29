@@ -34,7 +34,7 @@ public class VentaModel implements VentaUseCase {
     }
     
     @Override
-    public List<Venta> obtenerTodas() {
+    public List<Venta> listarVentas() {
         return ventaRepository.findAll();
     }
     

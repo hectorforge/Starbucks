@@ -17,7 +17,7 @@ public class CategoriaModel implements CategoriaUseCase {
 	    private final ProductoRepository _productoRepository;
 
 	    @Override
-	    public List<Categoria> listar() {
+	    public List<Categoria> listarCategorias() {
 	        return _categoriaRepository.findAll();
 	    }
 
@@ -27,17 +27,17 @@ public class CategoriaModel implements CategoriaUseCase {
 	    }
 
 	    @Override
-	    public Categoria registrar(Categoria categoria) {
+	    public Categoria registrarCategoria(Categoria categoria) {
 	        return _categoriaRepository.save(categoria);
 	    }
 
 	    @Override
-	    public Categoria actualizar(Categoria categoria) {
+	    public Categoria actualizarCategoria(Categoria categoria) {
 	        return _categoriaRepository.save(categoria);
 	    }
 
 	    @Override
-	    public void eliminar(Long id) {
+	    public void eliminarPorId(Long id) {
 	        _categoriaRepository.deleteById(id);
 	    }
 
