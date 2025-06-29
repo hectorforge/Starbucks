@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface RolUseCase {
 
-public Rol findById(Long id);
-	
+	public Rol findById(Long id);
 	public List<Rol> ListarRoles();
 
 }

@@ -17,25 +17,17 @@ public class Venta {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @ManyToOne
-    private Producto producto;
-
-    private int cantidad;
-    private BigDecimal precioUnitario;
     private LocalDateTime fecha;
-    
-    @Column(name = "modalidad")
-    private String modalidad;
-    
-    public BigDecimal getTotal() {
-        return precioUnitario.multiply(BigDecimal.valueOf(cantidad));
-    }
-    public String getFechaFormateada() {
-        if (fecha == null) return "";
-        return fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-    }
-    
-}
 
+    @Column(name = "modalidad")
+    private String modalidad; // PRESENCIAL, VIRTUAL
+
+    private BigDecimal total;
+
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleVenta> detalles = new ArrayList<>();
+
+}
