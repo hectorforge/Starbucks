@@ -19,7 +19,10 @@ public class DetalleVenta {
     @ManyToOne
     @JoinColumn(name = "producto_id")
     private Producto producto;
-    private int cantidad;
+    @Column(nullable = false)
+    private Integer cantidad;
+    @Column(nullable = false)
     private BigDecimal precioUnitario;
+    @Column(nullable = false)
     private BigDecimal subTotal;
 }

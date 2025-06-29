@@ -1,6 +1,7 @@
 package com.starbuks.app.models;
 
 import com.starbuks.app.entitys.bean.CarritoCompra;
+import com.starbuks.app.entitys.bean.DetalleVenta;
 import com.starbuks.app.entitys.bean.Venta;
 import com.starbuks.app.entitys.bean.ItemCarrito;
 import com.starbuks.app.entitys.bean.Producto;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -79,30 +81,44 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
             throw new RuntimeException("No hay carrito pendiente de pago");
         }
 
+        Usuario usuario = carrito.getUsuario();
+
         for (ItemCarrito item : carrito.getItems()) {
             Producto producto = item.getProducto();
             int nuevoStock = producto.getStock() - item.getCantidad();
             if (nuevoStock < 0) {
                 throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
             }
+
+            // Actualiza stock
             producto.setStock(nuevoStock);
             productoRepo.save(producto);
 
-            
+            // Crear una venta individual por producto
             Venta venta = new Venta();
-            venta.setUsuario(carrito.getUsuario());
-            venta.setProducto(producto);
-            venta.setCantidad(item.getCantidad());
-            venta.setPrecioUnitario(producto.getPrecio());
+            venta.setUsuario(usuario);
             venta.setFecha(LocalDateTime.now());
             venta.setModalidad("Online");
-            ventaRepository.save(venta); // inyecta y usa CompraRepository
+            venta.setTotal(BigDecimal.ZERO);
+            venta.setDetalles(new ArrayList<>());
+
+            DetalleVenta detalle = new DetalleVenta();
+            detalle.setProducto(producto);
+            detalle.setCantidad(item.getCantidad());
+            detalle.setPrecioUnitario(producto.getPrecio());
+            detalle.setSubTotal(producto.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())));
+            detalle.setVenta(venta);
+
+            venta.getDetalles().add(detalle);
+            venta.setTotal(detalle.getSubTotal());
+
+            ventaRepository.save(venta);
         }
 
         carrito.setPagado(true);
-        carrito.getItems().clear(); // Limpia el carrito
+        carrito.getItems().clear();
         carritoRepo.save(carrito);
-    } 
+    }
     @Override
     @Transactional
     public void eliminarDelCarrito(Long usuarioId, Long productoId) {

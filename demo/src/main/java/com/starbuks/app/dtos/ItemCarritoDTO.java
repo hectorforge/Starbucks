@@ -11,6 +11,7 @@ public class ItemCarritoDTO {
     private Long usuarioId;
     private String nombreProducto;
     private BigDecimal precioUnitario;
+    private BigDecimal subTotal;
 
     public BigDecimal getSubtotal() {
         if (precioUnitario == null) {

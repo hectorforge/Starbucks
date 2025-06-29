@@ -11,5 +11,6 @@ public class CarritoCompraDTO {
     private List<ItemCarritoDTO> items;
     private BigDecimal total;
     private int cantidadTotalItems;
+    private BigDecimal subTotal;
 
 }

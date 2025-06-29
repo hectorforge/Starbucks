@@ -11,6 +11,7 @@ import com.starbuks.app.usecase.ProductoUseCase;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -84,8 +85,11 @@ public class ClienteController {
     @GetMapping("/miscompras")
     public String verMisCompras(Model model) {
         Long usuarioId = 1L; // Reemplazar por el usuario autenticado en un caso real
-        var venta = ventaUseCase.obtenerVentaPorUsuario(usuarioId);
-        model.addAttribute("compras", venta);
+        var ventas = ventaUseCase.obtenerVentaPorUsuario(usuarioId);
+        if (ventas == null) ventas = new ArrayList<>();
+        ventas.removeIf(v -> v == null || v.getDetalles() == null);
+        
+        model.addAttribute("compras", ventas);
         model.addAttribute("usuarioId", usuarioId);
 
         var carrito = carritoUseCase.obtenerCarrito(usuarioId);

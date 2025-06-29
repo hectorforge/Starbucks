@@ -6,71 +6,87 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
-        html, body {
-		    height: 100%;
-		}
-		
-		body {
-		    display: flex;
-		    flex-direction: column;
-		}
-		
-		.container {
-		    flex: 1;
-		}
-    </style>
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
+    }
+
+    .table-nested td {
+      vertical-align: middle;
+    }
+
+    .table-nested th,
+    .table-nested td {
+      padding: 0.5rem !important;
+    }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/inicio}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/cliente/productos}">Productos</a></li>
-                <li class="nav-item"><a class="nav-link active" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
-                <li class="nav-item">
-				  <a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
-				    <i class="bi bi-cart-fill"></i> Carrito
-				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-				      <span th:text="${carritoCantidad}">0</span>
-				    </span>
-				  </a>
-				</li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/cliente/inicio}"><i class="bi bi-cup-hot"></i> Starbucks </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" th:href="@{/cliente/inicio}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/cliente/productos}">Productos</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/cliente/miscompras}">Mis Compras</a></li>
+        <li class="nav-item">
+          <a class="nav-link position-relative" th:href="@{'/carrito/' + ${usuarioId}}">
+            <i class="bi bi-cart-fill"></i> Carrito
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+              <span th:text="${carritoCantidad}">0</span>
+            </span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
 <div class="container py-5">
   <h2 class="mb-4 text-center">Historial de Compras</h2>
 
-  <table class="table table-striped table-hover">
+  <table class="table table-bordered align-middle text-center">
     <thead class="table-dark">
-    <tr>
-      <th>#</th>
-      <th>Producto</th>
-      <th>Categoría</th>
-      <th>Cantidad</th>
-      <th>Precio Unitario</th>
-      <th>Total</th>
-      <th>Fecha</th>
-    </tr>
+      <tr>
+        <th>#</th>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Total</th>
+        <th>Fecha</th>
+      </tr>
     </thead>
-    <tbody>
-    <tr th:each="compra, stat : ${compras}">
-	  <td th:text="${stat.count}"></td>
-	  <td th:text="${compra.producto != null ? compra.producto.nombre : 'Sin producto'}"></td>
-	  <td th:text="${compra.producto != null and compra.producto.categoriaId != null ? compra.producto.categoriaId.nombre : 'Sin categoría'}">Sin categoría</td>
-	  <td th:text="${compra.cantidad}"></td>
-	  <td th:text="'S/ ' + ${compra.precioUnitario}"></td>
-	  <td th:text="'S/ ' + ${compra.total}"></td>
-	  <td th:text="${compra.fechaFormateada}"></td>
-	</tr>
+    <tbody th:if="${compras != null}" th:each="compra, stat : ${compras}">
+      <tr>
+        <td class="text-center" th:text="${stat.count}" rowspan="1"></td>
+        <td colspan="6" class="table-primary text-start">
+          <strong>Modalidad:</strong> <span th:text="${compra.modalidad}"></span> -
+          <strong>Fecha:</strong> <span th:text="${#temporals.format(compra.fecha, 'dd/MM/yyyy HH:mm')}"></span>
+        </td>
+      </tr>
+      <tr th:each="detalle : ${compra.detalles}">
+        <td></td>
+        <td class="text-start" th:text="${detalle.producto?.nombre}">Producto</td>
+        <td class="text-start" th:text="${detalle.producto?.categoriaId?.nombre}">Categoría</td>
+        <td class="text-center" th:text="${detalle.cantidad}">1</td>
+        <td class="text-end" th:text="'S/ ' + ${detalle.precioUnitario}">S/ 0.00</td>
+        <td class="text-end" th:text="'S/ ' + ${detalle.subTotal}">S/ 0.00</td>
+        <td class="text-center" th:text="${#temporals.format(compra.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+      </tr>
     </tbody>
   </table>
 </div>

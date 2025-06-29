@@ -14,9 +14,12 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
     	       "LOWER(CONCAT(v.usuario.nombres, ' ', v.usuario.apellidos)) LIKE LOWER(CONCAT('%', :termino, '%'))")
     public List<Venta> buscarPorCliente(@Param("termino") String termino);
     
-    @Query("SELECT v FROM Venta v WHERE LOWER(v.producto.nombre) LIKE LOWER(CONCAT('%', :termino, '%'))")
+    @Query("SELECT DISTINCT v FROM Venta v JOIN v.detalles d WHERE LOWER(d.producto.nombre) LIKE LOWER(CONCAT('%', :termino, '%'))")
     List<Venta> buscarPorProducto(@Param("termino") String termino);
     
     @Query("SELECT v FROM Venta v WHERE DATE(v.fecha) = :fecha")
     List<Venta> buscarPorFecha(@Param("fecha") java.time.LocalDate fecha);
+    
+    @Query("SELECT v FROM Venta v LEFT JOIN FETCH v.detalles d LEFT JOIN FETCH d.producto p LEFT JOIN FETCH v.usuario u")
+    List<Venta> findAllConDetalles();
 }

@@ -2,113 +2,121 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registrar Venta</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#"><i class="bi bi-cup-hot me-2"></i> Starbucks Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarAdmin">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/dash}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productos}"><i class="bi bi-box-seam"></i> Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/ventas}"><i class="bi bi-cart-check-fill"></i> Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people-fill"></i> Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/reportes}"><i class="bi bi-bar-chart-fill"></i> Reportes</a></li>
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i> Admin</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/perfil}"><i class="bi bi-person"></i> Perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/configuracion}"><i class="bi bi-gear"></i> Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Registrar Venta</h2>
-    <form id="formVenta" th:action="@{/ventas/guardar}" th:object="${venta}" method="post" class="row g-3">
-        
+    <h2 class="mb-4">Registrar Nueva Venta</h2>
+
+    <form th:action="@{/ventas/guardar}" th:object="${venta}" method="post">
         <!-- Cliente -->
-        <div class="col-md-6">
-            <label class="form-label">Cliente</label>
-            <select class="form-select" th:field="*{usuarioId}" required>
-                <option value="">Seleccione</option>
+        <div class="mb-3">
+            <label class="form-label">Cliente:</label>
+            <select th:field="*{usuarioId}" class="form-select" required>
+                <option value="" disabled selected>Seleccione un cliente</option>
                 <option th:each="user : ${usuarios}" th:value="${user.id}" th:text="${user.nombres + ' ' + user.apellidos}"></option>
             </select>
         </div>
 
         <!-- Modalidad -->
-        <div class="col-md-6">
-		    <label class="form-label">Modalidad</label>
-		    <input type="text" class="form-control" name="modalidad" value="Presencial" readonly />
+        <div class="mb-3">
+		    <label class="form-label">Modalidad:</label>
+		    <input type="text" class="form-control" value="Presencial" readonly />
+		    <input type="hidden" name="modalidad" value="Presencial" />
 		</div>
 
-        <!-- Producto -->
-        <div class="col-md-4">
-            <label class="form-label">Producto</label>
-            <select class="form-select" th:field="*{productoId}" onchange="actualizarPrecio(this)" required>
-                <option value="">Seleccione</option>
-                <option th:each="prod : ${productos}" th:value="${prod.id}" th:text="${prod.nombre}" th:attr="data-precio=${prod.precio}"></option>
-            </select>
-        </div>
-
-        <!-- Cantidad -->
-        <div class="col-md-4">
-            <label class="form-label">Cantidad</label>
-            <input type="number" class="form-control" th:field="*{cantidad}" min="1" required />
-        </div>
-
-        <!-- Precio Unitario -->
-        <div class="col-md-4">
-            <label class="form-label">Precio Unitario</label>
-            <input type="number" class="form-control" th:field="*{precioUnitario}" step="0.01" readonly required id="precioUnitario" />
-        </div>
+        <!-- Detalles dinámicos -->
+        <div id="detalles-container"></div>
+        <button type="button" class="btn btn-outline-primary mb-3" onclick="agregarDetalle()">
+            <i class="bi bi-plus-circle"></i> Agregar Producto
+        </button>
 
         <!-- Botones -->
-        <div class="col-12 text-center mt-4">
-            <button type="button" class="btn btn-success" id="btnPagar">Pagar</button>
-            <a th:href="@{/ventas}" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Guardar Venta</button>
+            <a th:href="@{/ventas}" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancelar</a>
         </div>
     </form>
 </div>
-<div class="modal fade" id="resumenVentaModal" tabindex="-1" aria-labelledby="resumenVentaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="resumenVentaLabel">Resumen de la Venta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Cliente:</strong> <span id="resumenCliente"></span></p>
-        <p><strong>Producto:</strong> <span id="resumenProducto"></span></p>
-        <p><strong>Cantidad:</strong> <span id="resumenCantidad"></span></p>
-        <p><strong>Precio Unitario:</strong> <span id="resumenPrecio"></span></p>
-        <p><strong>Total:</strong> <span id="resumenTotal"></span></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" id="confirmarPago">Confirmar Pago</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-    function actualizarPrecio(select) {
-        const selected = select.options[select.selectedIndex];
-        const precio = selected.getAttribute("data-precio");
-        document.getElementById("precioUnitario").value = precio || "";
+
+<script th:inline="javascript">
+    let index = 0;
+
+    /*<![CDATA[*/
+    let productos = /*[[${productos}]]*/ [];
+    /*]]>*/
+
+
+    function agregarDetalle() {
+        const container = document.getElementById('detalles-container');
+        const div = document.createElement('div');
+        div.className = 'card mb-3';
+        div.innerHTML = `
+            <div class="card-body detalle-linea">
+                <h5 class="card-title">Detalle #${index + 1}</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Producto:</label>
+                        <select name="detalles[${index}].productoId" class="form-select" required onchange="actualizarPrecio(this)">
+                            <option value="" disabled selected>Seleccione un producto</option>
+                            ${productos.map(p => `<option value="${p.id}" data-precio="${p.precio}">${p.nombre}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Cantidad:</label>
+                        <input name="detalles[${index}].cantidad" type="number" min="1" class="form-control" value="1" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Precio Unitario (S/):</label>
+                        <input name="detalles[${index}].precioUnitario" type="number" step="0.01" class="form-control precio-unitario" required />
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        index++;
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const productoSelect = document.querySelector('[name="productoId"]');
-        if (productoSelect) productoSelect.dispatchEvent(new Event('change'));
-    });
+    function actualizarPrecio(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const precio = selectedOption.getAttribute("data-precio");
+        const container = selectElement.closest('.detalle-linea');
+        const precioInput = container.querySelector('.precio-unitario');
+        if (precioInput && precio) {
+            precioInput.value = parseFloat(precio).toFixed(2);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => agregarDetalle());
 </script>
-<script>
-    document.getElementById("btnPagar").addEventListener("click", function () {
-        const cliente = document.querySelector('[name="usuarioId"] option:checked').textContent;
-        const producto = document.querySelector('[name="productoId"] option:checked').textContent;
-        const cantidad = document.querySelector('[name="cantidad"]').value;
-        const precio = document.querySelector('[name="precioUnitario"]').value;
-        const total = (parseFloat(cantidad) * parseFloat(precio)).toFixed(2);
 
-        document.getElementById("resumenCliente").textContent = cliente;
-        document.getElementById("resumenProducto").textContent = producto;
-        document.getElementById("resumenCantidad").textContent = cantidad;
-        document.getElementById("resumenPrecio").textContent = `S/ ${precio}`;
-        document.getElementById("resumenTotal").textContent = `S/ ${total}`;
-
-        const modal = new bootstrap.Modal(document.getElementById('resumenVentaModal'));
-        modal.show();
-    });
-
-    document.getElementById("confirmarPago").addEventListener("click", function () {
-        document.getElementById("formVenta").submit();
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-
 </html>
