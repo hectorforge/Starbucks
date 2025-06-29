@@ -7,20 +7,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/dash")
 @RequiredArgsConstructor
-public class DashController {
+public class PerfilController {
 
-    @GetMapping("/dash")
-    public String dash(Model model, Authentication auth) {
+    @GetMapping("/perfil")
+    public String verPerfil(Authentication auth, Model model) {
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
         Usuario usuario = userDetails.getUsuario();
-        System.out.println("🔥🔥🔥🔥Este es el usuario :" + usuario);
-        model.addAttribute("usuarioLogueado", usuario);
-        return "dash/dashboard";
+        model.addAttribute("usuario", usuario);
+        return "dash/perfil";
     }
-
 }

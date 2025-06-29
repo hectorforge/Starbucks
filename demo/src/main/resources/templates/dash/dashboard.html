@@ -46,28 +46,74 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarAdmin">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/dash}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/dashboard}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/productos}"><i class="bi bi-box-seam"></i> Productos</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/ventas}"><i class="bi bi-cart-check-fill"></i> Ventas</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people-fill"></i> Usuarios</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/reportes}"><i class="bi bi-bar-chart-fill"></i> Reportes</a></li>
             </ul>
+
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> Admin
+                        <i class="bi bi-person-circle" th:text="${usuario.username}"></i>
                     </a>
+
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/perfil}"><i class="bi bi-person"></i> Perfil</a></li>
-                        <li><a class="dropdown-item" th:href="@{/configuracion}"><i class="bi bi-gear"></i> Configuración</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                        <div class="d-flex justify-content-center">
+                            <form th:action="@{/logout}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-outline-danger">Cerrar sesión</button>
+                            </form>
+                        </div>
+
+
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- Bienvenida personalizada -->
+<div class="container mb-5">
+    <div class="p-4 bg-light rounded-4 shadow-sm border border-2 border-primary">
+        <div class="d-flex align-items-center mb-3">
+            <div class="me-3">
+                <i class="bi bi-person-circle fs-1 text-primary"></i>
+            </div>
+            <div>
+                <h2 class="mb-0">Bienvenido,
+                    <span class="text-primary fw-bold" th:text="${usuario.nombres} + ' ' + ${usuario.apellidos}">Nombre Completo</span> 👋
+                </h2>
+                <p class="text-muted mb-1">¡Es un gusto tenerte de vuelta!</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <div class="border-start ps-3">
+                    <h6 class="text-muted mb-0">Correo electrónico</h6>
+                    <p class="fw-semibold text-dark mb-0" th:text="${usuario.email}">correo@example.com</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="border-start ps-3">
+                    <h6 class="text-muted mb-0">Nombre de usuario</h6>
+                    <p class="fw-semibold text-dark mb-0" th:text="${usuario.username}">username</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="border-start ps-3">
+                    <h6 class="text-muted mb-0">Rol de acceso</h6>
+                    <p class="fw-semibold text-dark mb-0" th:text="${usuario.rol.nombre}">ADMIN</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Main Dashboard -->
 <div class="container">

@@ -27,63 +27,39 @@
     </style>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
             <i class="bi bi-cup-hot me-2"></i> Starbucks Admin
         </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarAdmin" aria-controls="navbarAdmin" aria-expanded="false"
-                aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarAdmin">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/dash}">
-                        <i class="bi bi-grid-1x2-fill"></i> Dashboard
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/productos}">
-                        <i class="bi bi-box-seam"></i> Productos
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/ventas}">
-                        <i class="bi bi-cart-check-fill"></i> Ventas
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/usuarios}">
-                        <i class="bi bi-people-fill"></i> Usuarios
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/reportes}">
-                        <i class="bi bi-bar-chart-fill"></i> Reportes
-                    </a>
-                </li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/dashboard}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productos}"><i class="bi bi-box-seam"></i> Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/ventas}"><i class="bi bi-cart-check-fill"></i> Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}"><i class="bi bi-people-fill"></i> Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/reportes}"><i class="bi bi-bar-chart-fill"></i> Reportes</a></li>
             </ul>
 
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown"
-                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i> Admin
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle" th:text="${usuario.username}"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/perfil}"><i class="bi bi-person"></i> Perfil</a></li>
-                        <li><a class="dropdown-item" th:href="@{/configuracion}"><i class="bi bi-gear"></i> Configuración</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                        <div class="d-flex justify-content-center">
+                            <form th:action="@{/logout}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-outline-danger">Cerrar sesión</button>
+                            </form>
+                        </div>
+
+
                     </ul>
                 </li>
             </ul>
