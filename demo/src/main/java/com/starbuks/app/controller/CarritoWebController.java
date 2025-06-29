@@ -33,6 +33,6 @@ public class CarritoWebController {
 	            model.addAttribute("carritoItems", items);
 	        }
 	        model.addAttribute("usuarioId", usuarioId);
-	        return "carrito"; // esto busca carrito.html en src/main/resources/templates
+	        return "carrito";
 	    }
 }
