@@ -5,15 +5,18 @@ import com.starbuks.app.entitys.bean.Usuario;
 import com.starbuks.app.persistence.RolRepository;
 import com.starbuks.app.persistence.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+
 @Component
 @RequiredArgsConstructor
 public class DataInitRolesUsuarios {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final BCryptPasswordEncoder passwordEncoder; // <- inyectado
 
     @PostConstruct
     @Transactional
@@ -36,7 +39,7 @@ public class DataInitRolesUsuarios {
                     .email("hector@gmail.com")
                     .telefono("987654321")
                     .username("hector")
-                    .password("123")
+                    .password(passwordEncoder.encode("123"))
                     .activo(true)
                     .rol(rolAdmin)
                     .build();
@@ -47,30 +50,30 @@ public class DataInitRolesUsuarios {
                     .email("doe@gmail.com")
                     .telefono("912345678")
                     .username("doe")
-                    .password("abcdef")
+                    .password(passwordEncoder.encode("abcdef"))
                     .activo(true)
                     .rol(rolUser)
                     .build();
 
             Usuario usuarioDemo = Usuario.builder()
-                    .id(1L) // <- ID fija para pruebas
+                    .id(1L)
                     .nombres("Cliente Demo")
                     .apellidos("De Prueba")
                     .email("demo@correo.com")
                     .telefono("999999999")
                     .username("demo")
-                    .password("demo")
+                    .password(passwordEncoder.encode("demo"))
                     .activo(true)
                     .rol(rolUser)
                     .build();
-            
+
             Usuario usuario4 = Usuario.builder()
                     .nombres("Hector")
                     .apellidos("Hernandez")
                     .email("hector@gmail.com")
                     .telefono("987654321")
                     .username("hector")
-                    .password("123")
+                    .password(passwordEncoder.encode("123"))
                     .activo(true)
                     .rol(rolAdmin)
                     .build();
@@ -78,9 +81,9 @@ public class DataInitRolesUsuarios {
             usuarioRepository.save(usuario1);
             usuarioRepository.save(usuario2);
             usuarioRepository.save(usuarioDemo);
-            usuarioRepository.save(usuario4);            
+            usuarioRepository.save(usuario4);
 
-            System.out.println("🟢 Roles y Usuarios insertados (incluyendo usuario de prueba con ID 1)");
+            System.out.println("🟢 Roles y Usuarios insertados con contraseñas encriptadas.");
         }
     }
 }
