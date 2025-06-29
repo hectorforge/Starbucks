@@ -11,40 +11,49 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/registro", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .clearAuthentication(true)
-                        .permitAll()
-                );
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+				/*
+				 * .authorizeHttpRequests(auth -> auth .requestMatchers("/login", "/registro",
+				 * "/css/**", "/js/**", "/images/**").permitAll()
+				 * .requestMatchers("/cliente/inicio", "/cliente/productos").permitAll()
+				 * .requestMatchers("/carrito/pagar").authenticated() // 🔐 Aquí se exige login
+				 * .requestMatchers("/cliente/miscompras").authenticated() // Solo usuarios
+				 * logueados .requestMatchers("/admin/**").hasRole("ADMIN")
+				 * .anyRequest().authenticated() )
+				 */
+				.authorizeHttpRequests(
+						auth -> auth.requestMatchers("/login", "/registro", "/css/**", "/js/**", "/images/**")
+								.permitAll().requestMatchers("/cliente/inicio", "/cliente/productos").permitAll()
 
-        return http.build();
-    }
+								// Rutas solo para usuarios autenticados
+								.requestMatchers("/carrito/pagar").authenticated()
+								.requestMatchers("/cliente/miscompras").authenticated()
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+								// Rutas exclusivas para ADMIN
+								.requestMatchers("/dashboard/**", "/productos/**", "/ventas/**", "/usuarios/**",
+										"/reportes/**", "/admin/**")
+								.hasRole("ADMIN").anyRequest().authenticated())
 
-    // Necesario para inyectar AuthenticationManager si lo necesitas
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+				.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/dashboard", true).permitAll())
+				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout")
+						.invalidateHttpSession(true).deleteCookies("JSESSIONID").clearAuthentication(true).permitAll())
+				.exceptionHandling(exception -> exception.accessDeniedPage("/403"));
+		;
+
+		return http.build();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	// Necesario para inyectar AuthenticationManager si lo necesitas
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
 
 }
