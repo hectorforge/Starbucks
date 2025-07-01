@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/starbuks?createDatabaseIfNotExist=true
     username: root
-    password: 27182
+    password: Holynight
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

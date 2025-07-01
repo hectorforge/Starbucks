@@ -3,11 +3,16 @@ package com.starbuks.app.controller;
 import com.starbuks.app.dtos.CarritoCompraDTO;
 import com.starbuks.app.dtos.ItemCarritoDTO;
 import com.starbuks.app.entitys.bean.CarritoCompra;
+import com.starbuks.app.entitys.bean.Producto;
+import com.starbuks.app.exception.StockInsuficienteException;
 import com.starbuks.app.usecase.CarritoCompraUseCase;
+import com.starbuks.app.usecase.ProductoUseCase;
 
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+
+import org.springframework.http.ResponseEntity;
 
 //import java.util.List;
 
@@ -23,14 +28,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CarritoCompraController {
 
     private final CarritoCompraUseCase carritoUseCase;
+    
+    private final ProductoUseCase productoUseCase;
 
     @PostMapping("/agregar")
-    public String agregarProducto(@RequestParam Long usuarioId,
-                                  @RequestParam Long productoId,
-                                  @RequestParam int cantidad) {
+    @ResponseBody
+    public ResponseEntity<?> agregarProducto(@RequestParam Long usuarioId,
+                                             @RequestParam Long productoId,
+                                             @RequestParam int cantidad) {
+        Producto producto = productoUseCase.obtenerPorId(productoId)
+            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        if (producto.getStock() < cantidad) {
+            return ResponseEntity
+                .badRequest()
+                .body("Stock insuficiente para el producto: " + producto.getNombre());
+        }
+
         carritoUseCase.agregarAlCarrito(usuarioId, productoId, cantidad);
-        return "redirect:/cliente/productos";
+        return ResponseEntity.ok("Producto agregado al carrito");
     }
+
 
     @GetMapping("/{usuarioId}")
     public String verCarrito(@PathVariable Long usuarioId, Model model) {
@@ -73,9 +91,15 @@ public class CarritoCompraController {
 
 
     @PostMapping("/pagar")
-    public String pagar(@RequestParam Long usuarioId) {
-        carritoUseCase.pagarCarrito(usuarioId);
-        return "cliente/pago-exitoso";
+    public String pagar(@RequestParam Long usuarioId, Model model) {
+        try {
+            carritoUseCase.pagarCarrito(usuarioId);
+            return "cliente/pago-exitoso";
+        } catch (StockInsuficienteException e) {
+            model.addAttribute("errorStock", e.getMessage());
+            model.addAttribute("productos", productoUseCase.listarProductos()); // o la lista que uses
+            return "cliente/productos"; // la vista a la que quieres volver
+        }
     }
     
     @PostMapping("/eliminar")

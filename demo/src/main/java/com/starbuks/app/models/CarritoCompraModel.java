@@ -3,6 +3,7 @@ package com.starbuks.app.models;
 import com.starbuks.app.entitys.bean.CarritoCompra;
 import com.starbuks.app.entitys.bean.DetalleVenta;
 import com.starbuks.app.entitys.bean.Venta;
+import com.starbuks.app.exception.StockInsuficienteException;
 import com.starbuks.app.entitys.bean.ItemCarrito;
 import com.starbuks.app.entitys.bean.Producto;
 import com.starbuks.app.entitys.bean.Usuario;
@@ -87,7 +88,8 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
             Producto producto = item.getProducto();
             int nuevoStock = producto.getStock() - item.getCantidad();
             if (nuevoStock < 0) {
-                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
+            	throw new StockInsuficienteException("Stock insuficiente para el producto: " + producto.getNombre());
+
             }
 
             // Actualiza stock
