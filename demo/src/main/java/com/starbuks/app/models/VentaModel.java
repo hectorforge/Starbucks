@@ -7,6 +7,7 @@ import com.starbuks.app.entitys.bean.DetalleVenta;
 import com.starbuks.app.entitys.bean.Producto;
 import com.starbuks.app.entitys.bean.Usuario;
 import com.starbuks.app.entitys.bean.Venta;
+import com.starbuks.app.exception.StockInsuficienteException;
 import com.starbuks.app.persistence.ProductoRepository;
 import com.starbuks.app.persistence.UsuarioRepository;
 import com.starbuks.app.persistence.VentaRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -48,6 +50,7 @@ public class VentaModel implements VentaUseCase {
     }
 
     @Override
+    @Transactional
     public void registrarVenta(VentaModelDTO model) {
         // 1. Traer usuario
         Usuario usuario = usuarioRepository.findById(model.getUsuarioId())
@@ -61,12 +64,23 @@ public class VentaModel implements VentaUseCase {
 
         BigDecimal totalVenta = BigDecimal.ZERO;
 
-        // 3. Recorrer todos los detalles y agregarlos a 'venta'
+        // 3. Recorrer todos los detalles
         for (DetalleVentaDTO dto : model.getDetalles()) {
-            // validaciones...
+            // 3.1. Traer producto
             Producto producto = productoRepository.findById(dto.getProductoId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + dto.getProductoId()));
 
+            // 3.2. Verificar stock
+            if (producto.getStock() < dto.getCantidad()) {
+                throw new StockInsuficienteException(
+                    "Stock insuficiente para el producto: " + producto.getNombre());
+            }
+
+            // 3.3. Descontar stock y guardar producto
+            producto.setStock(producto.getStock() - dto.getCantidad());
+            productoRepository.save(producto);
+
+            // 3.4. Crear el detalle de venta
             DetalleVenta detalle = new DetalleVenta();
             detalle.setProducto(producto);
             detalle.setCantidad(dto.getCantidad());
@@ -79,7 +93,7 @@ public class VentaModel implements VentaUseCase {
             totalVenta = totalVenta.add(detalle.getSubTotal());
         }
 
-        // 4. Asignar el total acumulado y guardar solo una vez
+        // 4. Asignar total y guardar la venta (cascade para detalles)
         venta.setTotal(totalVenta);
         ventaRepository.save(venta);
     }

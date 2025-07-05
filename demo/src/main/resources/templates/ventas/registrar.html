@@ -47,7 +47,12 @@
 </nav>
 <div class="container mt-5">
     <h2 class="mb-4">Registrar Nueva Venta</h2>
-
+	<div th:if="${param.errorStock}" class="container mt-3">
+  <div class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <span th:text="${param.errorStock}">Mensaje de error</span>
+  </div>
+</div>
     <form th:action="@{/ventas/guardar}" th:object="${venta}" method="post">
         <!-- Cliente -->
         <div class="mb-3">

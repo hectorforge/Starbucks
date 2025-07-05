@@ -4,6 +4,7 @@ package com.starbuks.app.controller;
 import com.starbuks.app.dtos.DetalleVentaDTO;
 import com.starbuks.app.dtos.VentaModelDTO;
 import com.starbuks.app.entitys.bean.Venta;
+import com.starbuks.app.exception.StockInsuficienteException;
 import com.starbuks.app.usecase.ProductoUseCase;
 import com.starbuks.app.usecase.UsuarioUseCase;
 import com.starbuks.app.usecase.VentaUseCase;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
@@ -57,13 +59,20 @@ public class VentaController {
 
     // Guardar venta
     @PostMapping("/guardar")
-    public String guardarVenta(@ModelAttribute("venta") VentaModelDTO ventaModel) {
-    	if (ventaModel.getDetalles() == null || ventaModel.getDetalles().isEmpty()) {
-    	    return "redirect:/ventas/registrar?error=debesAgregarProductos";
-    	}
+    public String guardarVenta(@ModelAttribute("venta") VentaModelDTO ventaModel,
+                               RedirectAttributes attrs) {
+        if (ventaModel.getDetalles() == null || ventaModel.getDetalles().isEmpty()) {
+            return "redirect:/ventas/registrar?error=debesAgregarProductos";
+        }
 
-        ventaUseCase.registrarVenta(ventaModel);
-        return "redirect:/ventas";
+        try {
+            ventaUseCase.registrarVenta(ventaModel);
+            return "redirect:/ventas";
+        } catch (StockInsuficienteException ex) {
+            // reenviamos al form con el mensaje en un query‐param
+            attrs.addAttribute("errorStock", ex.getMessage());
+            return "redirect:/ventas/registrar";
+        }
     }
 
     // Buscar venta por cliente, producto o fecha
