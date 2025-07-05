@@ -20,4 +20,6 @@ public List<Usuario> findByNombresStartingWith(String nombre);
 	public List<Usuario> ListarUsuario();
 
 	Optional<Usuario> findByUsername(String username);
+	
+	Optional<Usuario> findByUsernameAndActivoTrue(String username);
 }

@@ -1,8 +1,10 @@
 package com.starbuks.app.entitys.bean;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -42,8 +44,8 @@ public class Usuario {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "activo")
-    private Boolean activo;
+    @Column(name = "activo", nullable = false)
+    private Boolean activo = true; 
 
     @CreationTimestamp
     @Column(name = "fecha_registro", updatable = false)
@@ -56,4 +58,10 @@ public class Usuario {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
+    
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Venta> ventas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<CarritoCompra> carritos = new ArrayList<>();
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -79,11 +80,12 @@ public class UsuarioController {
 	}
 
 	// ELIMINAR USUARIO
-	@GetMapping("/eliminar/{id}")
-	public String eliminarUsuario(@PathVariable Long id) {
-		usuarioUseCase.eliminarPorId(id);
-		return "redirect:/usuarios";
-	}
+	@PostMapping("/eliminar/{id}")
+    public String eliminarUsuario(@PathVariable Long id, RedirectAttributes attrs) {
+        usuarioUseCase.eliminarPorId(id);
+        attrs.addFlashAttribute("mensajeExito", "Usuario eliminado");
+        return "redirect:/usuarios";
+    }
 
 	// Convertir DTO a Entidad con ID (para editar)
 	private Usuario convertirDtoAEntidad(UsuarioDTO dto, Long id) {
