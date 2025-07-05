@@ -91,14 +91,16 @@ public class CarritoCompraController {
 
 
     @PostMapping("/pagar")
-    public String pagar(@RequestParam Long usuarioId, Model model) {
+    public String pagar(@RequestParam Long usuarioId,
+                        RedirectAttributes redirectAttributes) {
         try {
             carritoUseCase.pagarCarrito(usuarioId);
             return "cliente/pago-exitoso";
         } catch (StockInsuficienteException e) {
-            model.addAttribute("errorStock", e.getMessage());
-            model.addAttribute("productos", productoUseCase.listarProductos()); // o la lista que uses
-            return "cliente/productos"; // la vista a la que quieres volver
+            // 1️⃣ guardamos el mensaje de error en flash
+            redirectAttributes.addFlashAttribute("errorStock", e.getMessage());
+            // 2️⃣ redirigimos de vuelta al carrito
+            return "redirect:/carrito/" + usuarioId;
         }
     }
     

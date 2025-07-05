@@ -78,6 +78,9 @@
 	<div class="container py-5">
 		<h2 class="mb-4 text-center">Catálogo de Productos</h2>
 		<div th:if="${errorStock}" class="alert alert-danger text-center" role="alert">
+			<div th:if="${errorStock}" class="alert alert-danger" th:text="${errorStock}"></div>
+<!-- muestra éxito -->
+	<div th:if="${successCompra}" class="alert alert-success" th:text="${successCompra}"></div>
 		    <p th:text="${errorStock}"></p>
 		</div>
 

@@ -97,11 +97,14 @@
 <div class="container mt-4">
     <h2 class="text-center my-4">🛒 Carrito de Compras</h2>
 	<div th:if="${mensaje}" class="alert alert-success text-center" role="alert">
+	
     <i class="bi bi-check-circle-fill"></i> <span th:text="${mensaje}">Mensaje de éxito</span>
 	</div>
     <div th:if="${carrito.items != null and !carrito.items.isEmpty()}">
+      <div th:if="${errorStock}" class="alert alert-danger" th:text="${errorStock}"></div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
+            
                 <thead class="table-success">
 			    <tr>
 			        <th>Producto</th>
