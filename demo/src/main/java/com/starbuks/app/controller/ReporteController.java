@@ -17,14 +17,13 @@ import java.io.IOException;
 public class ReporteController {
     private final ReporteService reporteService;
 
-    /** 1️⃣ Devuelve la página Thymeleaf con los botones */
+    /** 1️⃣ Devuelve la página Thymeleaf con los botones e iframe */
     @GetMapping
     public String verMenuReportes(Model model) {
-        // si necesitas pasar algún dato, lo añades al model
         return "reportes/reportes";  // buscará src/main/resources/templates/reportes.html
     }
 
-    /** 2️⃣ Descarga/abre el PDF de ventas */
+    /** 2️⃣ Descarga/abre el PDF de ventas dentro del iframe */
     @GetMapping("/ventas/pdf")
     public void descargarReporteVentas(HttpServletResponse resp) throws JRException, IOException {
         byte[] pdf = reporteService.generarReporteVentas();
@@ -34,7 +33,7 @@ public class ReporteController {
         resp.getOutputStream().flush();
     }
 
-    /** 3️⃣ Descarga/abre el PDF de productos */
+    /** 3️⃣ Descarga/abre el PDF de productos dentro del iframe */
     @GetMapping("/productos/pdf")
     public void descargarReporteProductos(HttpServletResponse resp) throws JRException, IOException {
         byte[] pdf = reporteService.generarReporteProductos();

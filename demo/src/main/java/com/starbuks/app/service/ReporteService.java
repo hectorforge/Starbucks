@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,32 +76,25 @@ public class ReporteService {
 
     public byte[] generarReporteProductos() throws JRException {
         try {
-            // 1) Obtener lista de productos
             List<Producto> productos = productoRepo.findAll();
-
-            // 2) Cargar el .jasper compilado
-            InputStream jasperStream = new ClassPathResource(
-                    "templates/reportes/reporte_productos.jasper")
+            InputStream jasperStream = new ClassPathResource("templates/reportes/reporte_productos.jasper")
                 .getInputStream();
 
-            // 3) Parámetros (si necesitas pasar alguno)
+            // 3) Parámetros
             Map<String, Object> params = new HashMap<>();
-            // ejemplo: fecha de reporte
-            params.put("REPORT_DATE", LocalDate.now().format(DateTimeFormatter.ISO_DATE));
-            
+            // Fecha actual como java.util.Date para el parámetro ReportDate
+            Date reportDate = Date.from(
+                LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()
+            );
+            params.put("ReportDate", reportDate);
+
             String reportDir = new ClassPathResource("templates/reportes/")
-                    .getFile()
-                    .getAbsolutePath() + "/";
-            	params.put("imageDir", reportDir);
+                .getFile()
+                .getAbsolutePath() + "/";
+            params.put("imageDir", reportDir);
 
-            // 4) DataSource
-            JRBeanCollectionDataSource ds =
-                new JRBeanCollectionDataSource(productos);
-
-            // 5) Llenar
+            JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(productos);
             JasperPrint jp = JasperFillManager.fillReport(jasperStream, params, ds);
-
-            // 6) Exportar a PDF
             return JasperExportManager.exportReportToPdf(jp);
 
         } catch (IOException e) {

@@ -84,39 +84,44 @@ public class CarritoCompraModel implements CarritoCompraUseCase {
 
         Usuario usuario = carrito.getUsuario();
 
+        // 1. Crear la venta única
+        Venta venta = new Venta();
+        venta.setUsuario(usuario);
+        venta.setFecha(LocalDateTime.now());
+        venta.setModalidad("Online");
+        venta.setDetalles(new ArrayList<>());
+
+        BigDecimal totalVenta = BigDecimal.ZERO;
+
+        // 2. Procesar cada ítem y convertirlo en DetalleVenta
         for (ItemCarrito item : carrito.getItems()) {
             Producto producto = item.getProducto();
             int nuevoStock = producto.getStock() - item.getCantidad();
             if (nuevoStock < 0) {
-            	throw new StockInsuficienteException("Stock insuficiente para el producto: " + producto.getNombre());
-
+                throw new StockInsuficienteException(
+                   "Stock insuficiente para el producto: " + producto.getNombre());
             }
-
-            // Actualiza stock
             producto.setStock(nuevoStock);
             productoRepo.save(producto);
-
-            // Crear una venta individual por producto
-            Venta venta = new Venta();
-            venta.setUsuario(usuario);
-            venta.setFecha(LocalDateTime.now());
-            venta.setModalidad("Online");
-            venta.setTotal(BigDecimal.ZERO);
-            venta.setDetalles(new ArrayList<>());
 
             DetalleVenta detalle = new DetalleVenta();
             detalle.setProducto(producto);
             detalle.setCantidad(item.getCantidad());
             detalle.setPrecioUnitario(producto.getPrecio());
-            detalle.setSubTotal(producto.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())));
+            BigDecimal sub = producto.getPrecio()
+                             .multiply(BigDecimal.valueOf(item.getCantidad()));
+            detalle.setSubTotal(sub);
             detalle.setVenta(venta);
 
             venta.getDetalles().add(detalle);
-            venta.setTotal(detalle.getSubTotal());
-
-            ventaRepository.save(venta);
+            totalVenta = totalVenta.add(sub);
         }
 
+        // 3. Asignar total y guardar UNA VEZ
+        venta.setTotal(totalVenta);
+        ventaRepository.save(venta);
+
+        // 4. Marcar carrito como pagado y limpiar ítems
         carrito.setPagado(true);
         carrito.getItems().clear();
         carritoRepo.save(carrito);

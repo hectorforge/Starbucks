@@ -45,8 +45,11 @@ public class SecurityConfig {
 						.permitAll())
 				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout")
 						.invalidateHttpSession(true).deleteCookies("JSESSIONID").clearAuthentication(true).permitAll())
-				.exceptionHandling(exception -> exception.accessDeniedPage("/403"));
+				.exceptionHandling(exception -> exception.accessDeniedPage("/403")).headers(headers -> headers
+		                .frameOptions(frame -> frame.sameOrigin())//para que permita visualizar los reportes con el iframe
+			            );
 		;
+		
 
 		return http.build();
 	}
